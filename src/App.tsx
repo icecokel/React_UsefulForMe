@@ -1,7 +1,8 @@
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { PagePath } from "./common/enum";
-
+import "./common/style.scss";
 import Main from "./components/Main";
+import Timer from "./components/Timer/Timer";
 
 const App = () => {
   return (
@@ -13,7 +14,10 @@ const App = () => {
             path={PagePath.Main}
             render={(props) => <Main {...props} />}
           />
-          <Route></Route>
+          <Route
+            path={PagePath.Timer}
+            render={(props) => <Timer {...props} />}
+          />
           <Route></Route>
         </Switch>
       </Router>
