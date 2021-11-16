@@ -3,3 +3,19 @@
   justify-content: center;
   margin-top: 20px;
 }
+
+.box_timer {
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+  .timer {
+  }
+  .box_setting {
+    display: flex;
+    flex-direction: column;
+    .custom {
+    }
+    .quick {
+    }
+  }
+}
