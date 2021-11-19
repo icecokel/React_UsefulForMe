@@ -5,9 +5,36 @@ const SECOND_OF_MINUTE = 60;
 const SECOND_OF_HOUR = 3600;
 const SECOND_OF_DAY = 86400;
 
+const quickSettingList = [
+  { name: "1시간", time: SECOND_OF_HOUR },
+  { name: "30분", time: 30 * SECOND_OF_MINUTE },
+  { name: "10분", time: 10 * SECOND_OF_MINUTE },
+];
+
 const Timer = (props: any) => {
   const [sec, setSec] = useState<number>(SECOND_OF_HOUR);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
+
+  const createQuickSettingButton = () => {
+    const buttonList = [] as any;
+
+    quickSettingList.forEach((item) => {
+      buttonList.push(
+        <button
+          className="quick_button"
+          id={"quick_" + item.time}
+          onClick={() => {
+            setSec(item.time);
+            setIsPlaying(true);
+          }}
+        >
+          {item.name}
+        </button>
+      );
+    });
+
+    return buttonList;
+  };
 
   useEffect(() => {}, [sec, isPlaying]);
   return (
@@ -40,37 +67,11 @@ const Timer = (props: any) => {
         <div className="box_setting">
           <div className="custom">커스텀 설정</div>
           <div className="quick">
-            빠른 설정
-            <button
-              onClick={() => {
-                setSec(SECOND_OF_HOUR);
-                setIsPlaying(true);
-              }}
-            >
-              1시간
-            </button>
-            <button
-              onClick={() => {
-                setSec(30 * SECOND_OF_MINUTE);
-                setIsPlaying(true);
-              }}
-            >
-              30분
-            </button>
-            <button
-              onClick={() => {
-                setSec(10 * SECOND_OF_MINUTE);
-                setIsPlaying(true);
-              }}
-            >
-              10분
-            </button>
+            <label>빠른 설정</label>
+            <div>{createQuickSettingButton()}</div>
           </div>
         </div>
       </div>
-      {/* <div>
-        <img src="images/timer.jpg" alt="tt" />
-      </div> */}
     </div>
   );
 };
