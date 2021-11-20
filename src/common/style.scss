@@ -5,17 +5,39 @@
 }
 
 .box_timer {
-  width: 100%;
+  width: 100vw;
   display: flex;
   justify-content: space-evenly;
   .timer {
+    width: 60%;
+    display: flex;
+    justify-content: center;
   }
   .box_setting {
+    width: 40%;
     display: flex;
     flex-direction: column;
+    border: black solid 1px;
+    padding: 10px;
     .custom {
     }
     .quick {
+      label {
+        font-size: 20px;
+      }
+      div {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        .quick_button {
+          margin: 10px;
+          height: 40px;
+          width: 200px;
+          background-color: black;
+          color: white;
+        }
+      }
     }
   }
 }
