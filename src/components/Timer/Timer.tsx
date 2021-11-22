@@ -14,6 +14,7 @@ const quickSettingList = [
 const Timer = (props: any) => {
   const [sec, setSec] = useState<number>(SECOND_OF_HOUR);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
+  const [timerTag, setTimerTag] = useState<any>();
 
   const createQuickSettingButton = () => {
     const buttonList = [] as any;
@@ -26,6 +27,7 @@ const Timer = (props: any) => {
           onClick={() => {
             setSec(item.time);
             setIsPlaying(true);
+            createCircleTimeer();
           }}
         >
           {item.name}
@@ -36,34 +38,49 @@ const Timer = (props: any) => {
     return buttonList;
   };
 
+  const createCircleTimeer = () => {
+    setTimerTag("");
+    const timer = (
+      <CountdownCircleTimer
+        isPlaying={isPlaying}
+        duration={sec}
+        size={400}
+        strokeWidth={50}
+        colors={[
+          ["#004777", 0.33],
+          ["#F7B801", 0.33],
+          ["#A30000", 0.33],
+        ]}
+      >
+        {({ remainingTime }: any) => {
+          if (!remainingTime) {
+            return;
+          }
+          // return Math.round((remainingTime / sec) * 100);
+
+          return remainingTime;
+        }}
+      </CountdownCircleTimer>
+    );
+    setTimerTag(timer);
+  };
+
   useEffect(() => {}, [sec, isPlaying]);
   return (
     <div>
       <h2>타이머</h2>
 
       <div className="box_timer">
-        <div className="timer">
-          <CountdownCircleTimer
-            isPlaying={isPlaying}
-            duration={sec}
-            size={400}
-            strokeWidth={50}
-            colors={[
-              ["#004777", 0.33],
-              ["#F7B801", 0.33],
-              ["#A30000", 0.33],
-            ]}
-          >
-            {({ remainingTime }: any) => {
-              if (!remainingTime) {
-                return;
-              }
-              return Math.round((remainingTime / sec) * 100);
-            }}
-          </CountdownCircleTimer>
-        </div>
+        <div className="timer">{timerTag}</div>
         <div className="box_setting">
-          <div className="custom">커스텀 설정</div>
+          <div className="custom">
+            <label>커스텀 설정</label>
+            <div>
+              <input type="text" />시
+              <input type="text" />분
+              <input type="text" />초<button>시작</button>
+            </div>
+          </div>
           <div className="quick">
             <label>빠른 설정</label>
             <div>{createQuickSettingButton()}</div>
