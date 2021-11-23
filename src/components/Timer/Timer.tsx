@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 
 const SECOND_OF_MINUTE = 60;
 const SECOND_OF_HOUR = 3600;
-const SECOND_OF_DAY = 86400;
 
 const quickSettingList = [
   { name: "1시간", time: SECOND_OF_HOUR },
@@ -12,9 +11,10 @@ const quickSettingList = [
 ];
 
 const Timer = (props: any) => {
-  const [sec, setSec] = useState<number>(SECOND_OF_HOUR);
+  const [sec, setSec] = useState<number>();
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
-  const [timerTag, setTimerTag] = useState<any>();
+
+  useEffect(() => {}, []);
 
   const createQuickSettingButton = () => {
     const buttonList = [] as any;
@@ -27,7 +27,6 @@ const Timer = (props: any) => {
           onClick={() => {
             setSec(item.time);
             setIsPlaying(true);
-            createCircleTimeer();
           }}
         >
           {item.name}
@@ -38,31 +37,18 @@ const Timer = (props: any) => {
     return buttonList;
   };
 
-  const createCircleTimeer = () => {
-    setTimerTag("");
-    const timer = (
-      <CountdownCircleTimer
-        isPlaying={isPlaying}
-        duration={sec}
-        size={400}
-        strokeWidth={50}
-        colors={[
-          ["#004777", 0.33],
-          ["#F7B801", 0.33],
-          ["#A30000", 0.33],
-        ]}
-      >
-        {({ remainingTime }: any) => {
-          if (!remainingTime) {
-            return;
-          }
-          // return Math.round((remainingTime / sec) * 100);
+  const renderTime = ({ remainingTime }: any) => {
+    if (remainingTime === 0) {
+      return <div className="timer">Too lale...</div>;
+    }
 
-          return remainingTime;
-        }}
-      </CountdownCircleTimer>
+    return (
+      <div>
+        <div className="text">Remaining</div>
+        <div className="value">{remainingTime}</div>
+        <div className="text">seconds</div>
+      </div>
     );
-    setTimerTag(timer);
   };
 
   useEffect(() => {}, [sec, isPlaying]);
@@ -71,7 +57,22 @@ const Timer = (props: any) => {
       <h2>타이머</h2>
 
       <div className="box_timer">
-        <div className="timer">{timerTag}</div>
+        <div className="timer">
+          <CountdownCircleTimer
+            isPlaying
+            key={sec}
+            duration={sec ?? 0}
+            size={500}
+            strokeWidth={50}
+            colors={[
+              ["#004777", 0.33],
+              ["#F7B801", 0.33],
+              ["#A30000", 0.33],
+            ]}
+          >
+            {renderTime}
+          </CountdownCircleTimer>
+        </div>
         <div className="box_setting">
           <div className="custom">
             <label>커스텀 설정</label>
