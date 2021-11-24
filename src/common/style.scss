@@ -1,19 +1,149 @@
-.main {
+// 공통
+$color_base: #101820;
+$color_point: #fee715;
+$color_calcel: #fcf6f5;
+$color_alert: #a4193d;
+
+@import url("https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap");
+
+#root {
+  font-family: "Do Hyeon", sans-serif;
+  font-weight: 300;
+}
+h1 {
+  font-size: 2.25rem;
+}
+h2 {
+  font-size: 2rem;
+}
+h3 {
+  font-size: 1.75rem;
+}
+h4 {
+  font-size: 1.5rem;
+}
+h5 {
+  font-size: 1.25rem;
+}
+h6 {
+  font-size: 1rem;
+}
+div {
+  border-radius: 5px;
+}
+
+ul {
+  list-style: none;
   display: flex;
-  justify-content: center;
-  margin-top: 20px;
+  flex-direction: column;
+}
+
+button {
+  background-color: $color_base;
+  color: $color_point;
+  padding: 10px;
+  margin: 2px;
+  border-radius: 5px;
+  border: solid 1px $color_point;
+  font-size: 1rem;
+
+  &:hover {
+    color: $color_base;
+    background-color: $color_point;
+    border: solid 1px $color_base;
+  }
+}
+
+input[type="number"],
+input[type="text"] {
+  border: 1px solid $color_base;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+  padding: 0.4rem 0.8rem;
+
+  &:hover {
+    border: 1px solid $color_point;
+  }
+}
+
+// 그 외
+
+.box_header {
+  border-bottom: $color_base 6px double;
+  border-top: $color_base 2px solid;
+  border-radius: 0px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  font-size: 1.5em;
+
+  padding: 5px 15px;
+
+  div:last-child {
+    padding: 0px;
+    margin: 0px;
+    text-align: right;
+  }
+
+  .box_btn {
+    display: flex;
+    justify-content: center;
+    .btn_header {
+      margin: 0px 5px;
+      padding: 5px 15px;
+    }
+  }
+}
+
+.main {
+  margin-top: 10px;
+  margin: 0px auto;
+  padding-left: 10px;
+  padding-right: 10px;
+  width: 90vw;
+  height: 90vh;
+}
+
+.box_main {
+  display: flex;
+  height: 80vh;
+  div {
+    padding: 5px;
+    flex: 1;
+  }
+  .box_dashboard {
+    display: flex;
+    flex-direction: column;
+
+    div {
+      width: 100%;
+      flex: 1;
+      border: solid 1px $color_alert;
+    }
+  }
+  .box_menu {
+    flex: 1;
+    ul {
+      padding: 0px 20px;
+      li {
+      }
+    }
+  }
 }
 
 .box_timer {
-  width: 100vw;
+  flex: 1;
   display: flex;
   justify-content: space-evenly;
   .circle_timer {
-    width: 55%;
+    flex: 1;
     display: flex;
     justify-content: center;
 
     .timer {
+      text-align: center;
       .text {
         font-size: 2em;
       }
@@ -23,10 +153,16 @@
     }
   }
   .box_setting {
-    width: 45%;
+    flex: 0.8;
     display: flex;
     flex-direction: column;
-    padding: 10px;
+    .box_contoller {
+      div {
+        button {
+          margin-right: 10px;
+        }
+      }
+    }
     .custom {
       div {
         input {
@@ -36,10 +172,6 @@
       }
     }
     .quick {
-      label {
-        font-size: 20px;
-      }
-
       div {
         display: flex;
         flex-direction: column;
