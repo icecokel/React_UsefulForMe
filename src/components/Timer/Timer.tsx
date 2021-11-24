@@ -1,5 +1,6 @@
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import { useEffect, useState } from "react";
+import Header from "../Header";
 
 const SECOND_OF_MINUTE = 60;
 const SECOND_OF_HOUR = 3600;
@@ -16,6 +17,8 @@ const quickSettingList = [
  *
  * @author LeeSangMin
  * @since 2021/11/24
+ *
+ * @todo 커스텀 시간 수기 입력으로 한계값 초과가능 수정 필요
  */
 const Timer = (props: any) => {
   const [sec, setSec] = useState<number>();
@@ -34,7 +37,9 @@ const Timer = (props: any) => {
     if (remainingTime === 0) {
       return (
         <div className="timer">
-          {isEnableRestart ? "1.5초 후 재시작 합니다." : "설정 대기중 .."}
+          <div className="text">
+            {isEnableRestart ? "1.5초 후 재시작 합니다." : "설정 대기중 .."}
+          </div>
         </div>
       );
     }
@@ -127,6 +132,9 @@ const Timer = (props: any) => {
   };
   return (
     <div>
+      <div>
+        <Header />
+      </div>
       <h2>타이머</h2>
 
       <div className="box_timer">
@@ -151,7 +159,7 @@ const Timer = (props: any) => {
         </div>
         <div className="box_setting">
           <div className="box_contoller">
-            <label>조작</label>
+            <h4>조작</h4>
             <div>
               <button
                 onClick={() => {
@@ -171,16 +179,16 @@ const Timer = (props: any) => {
             </div>
           </div>
           <div className="custom">
-            <label>커스텀 설정</label>
+            <h4>커스텀 설정</h4>
             <div>
-              <input type="number" id="customHour" />시
-              <input type="number" id="customMinute" />분
-              <input type="number" id="customSecond" />초
+              <input type="number" id="customHour" max={23} />시
+              <input type="number" id="customMinute" max={59} />분
+              <input type="number" id="customSecond" max={59} />초
               <button onClick={onClickSetCutomerButton}>시작</button>
             </div>
           </div>
           <div className="quick">
-            <label>빠른 설정</label>
+            <h4>빠른 설정</h4>
             <div>{createQuickButton()}</div>
           </div>
         </div>
