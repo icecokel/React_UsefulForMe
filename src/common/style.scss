@@ -8,35 +8,41 @@
   width: 100vw;
   display: flex;
   justify-content: space-evenly;
-  .timer {
-    width: 60%;
+  .circle_timer {
+    width: 55%;
     display: flex;
     justify-content: center;
+
+    .timer {
+      .text {
+        font-size: 2em;
+      }
+      .value {
+        font-size: 3em;
+      }
+    }
   }
   .box_setting {
-    width: 40%;
+    width: 45%;
     display: flex;
     flex-direction: column;
-    border: black solid 1px;
     padding: 10px;
     .custom {
+      div {
+        input {
+          width: 20%;
+          display: inline;
+        }
+      }
     }
     .quick {
       label {
         font-size: 20px;
       }
+
       div {
         display: flex;
         flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        .quick_button {
-          margin: 10px;
-          height: 40px;
-          width: 200px;
-          background-color: black;
-          color: white;
-        }
       }
     }
   }
