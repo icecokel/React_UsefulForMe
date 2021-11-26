@@ -17,8 +17,6 @@ const quickSettingList = [
  *
  * @author LeeSangMin
  * @since 2021/11/24
- *
- * @todo 커스텀 시간 수기 입력으로 한계값 초과가능 수정 필요
  */
 const Timer = (props: any) => {
   const [sec, setSec] = useState<number>();
@@ -85,24 +83,36 @@ const Timer = (props: any) => {
   };
 
   /**
-   * 태그의 값의 자료형을 number로 변환
+   * 엘리먼트의 값의 자료형을 number로 변환
    *
-   * @param target 인풋 태그
+   * @param target 인풋 엘리먼트
    * @returns
-   * 자료형 number 인 태그의 값
-   * 태그의 값이 음수일 경우 양수로 반환
-   * 태그의 값이 없을 경우 0을 반환
+   * 자료형 number 인 엘리먼트의 값
+   * 엘리먼트의 값이 음수일 경우 양수로 반환
+   * 엘리먼트의 값이 없을 경우 0을 반환
+   * 엘리먼트의 값이 한계치를 넘을 경우 한계치로 반환 및 엘리먼트의 값을 수정
    */
   const inputElementValueToNumber = (target: HTMLInputElement) => {
-    if (!target.value) {
+    const number = Number.parseInt(target.value);
+
+    if (!number) {
       return 0;
     }
 
-    if (Number.parseInt(target.value) < 0) {
-      return Number.parseInt(target.value) * -1;
+    if (number < 0) {
+      return number * -1;
     }
 
-    return Number.parseInt(target.value);
+    if (target.id === "customHour" && number > 24) {
+      target.value = 23 + "";
+      return 23;
+    }
+
+    if (number > 60) {
+      target.value = 59 + "";
+      return 59;
+    }
+    return number;
   };
 
   /**
@@ -180,10 +190,11 @@ const Timer = (props: any) => {
           </div>
           <div className="custom">
             <h4>커스텀 설정</h4>
+            <p> ** 최대 23시간 59분 50초 까지 가능합니다.</p>
             <div>
-              <input type="number" id="customHour" max={23} />시
-              <input type="number" id="customMinute" max={59} />분
-              <input type="number" id="customSecond" max={59} />초
+              <input type="number" id="customHour" max={23} /> 시
+              <input type="number" id="customMinute" max={59} /> 분
+              <input type="number" id="customSecond" max={59} /> 초
               <button onClick={onClickSetCutomerButton}>시작</button>
             </div>
           </div>
