@@ -22,6 +22,7 @@ const Timer = (props: any) => {
   const [sec, setSec] = useState<number>();
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [isEnableRestart, setIsEnableRestart] = useState<boolean>(false);
+  const trainSound = new Audio("/sounds/Wooden Train Whistle.mp3");
 
   useEffect(() => {}, [sec, isPlaying]);
 
@@ -36,7 +37,7 @@ const Timer = (props: any) => {
       return (
         <div className="timer">
           <div className="text">
-            {isEnableRestart ? "1.5초 후 재시작 합니다." : "설정 대기중 .."}
+            {isEnableRestart ? "17초 후 재시작 합니다." : "설정 대기중 .."}
           </div>
         </div>
       );
@@ -156,7 +157,8 @@ const Timer = (props: any) => {
             size={500}
             strokeWidth={50}
             onComplete={() => {
-              return [isEnableRestart, 1500];
+              trainSound.play();
+              return [isEnableRestart, 17000];
             }}
             colors={[
               ["#004777", 0.33],
