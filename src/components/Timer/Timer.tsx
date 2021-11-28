@@ -23,7 +23,7 @@ const Timer = (props: any) => {
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [isEnableRestart, setIsEnableRestart] = useState<boolean>(false);
   const [isPlayingSounds, setIsPlayingSounds] = useState<boolean>(false);
-  const trainSound = new Audio("/sounds/Wooden Train Whistle.mp3");
+  const trainSound = new Audio("/sounds/Alarm Clock.mp3");
 
   useEffect(() => {}, [sec, isPlaying]);
 
@@ -168,9 +168,9 @@ const Timer = (props: any) => {
               setIsPlayingSounds(true);
               setTimeout(() => {
                 setIsPlayingSounds(false);
-              }, 16000);
+              }, 5000);
 
-              return [isEnableRestart, 17000];
+              return [isEnableRestart, 6000];
             }}
             colors={[
               ["#004777", 0.33],
