@@ -3,6 +3,7 @@ import { PagePath } from "./common/enum";
 import "./common/style.scss";
 import Main from "./components/Main";
 import Timer from "./components/Timer/Timer";
+import NotFonud from "./components/NotFound";
 
 const App = () => {
   return (
@@ -18,7 +19,7 @@ const App = () => {
             path={PagePath.Timer}
             render={(props) => <Timer {...props} />}
           />
-          <Route></Route>
+          <Route component={NotFonud}></Route>
         </Switch>
       </Router>
     </div>
