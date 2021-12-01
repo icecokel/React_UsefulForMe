@@ -1,3 +1,4 @@
+// TODO 디자인 컨셉 다시 잡을 예정,
 // 공통
 $color_base: #101820;
 $color_point: #fee715;
@@ -73,6 +74,8 @@ input[type="text"] {
   border-top: $color_base 2px solid;
   border-radius: 0px;
 
+  margin-top: 15px;
+
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -85,6 +88,7 @@ input[type="text"] {
     padding: 0px;
     margin: 0px;
     text-align: right;
+    width: 10vw;
   }
 
   .box_btn {
@@ -98,7 +102,6 @@ input[type="text"] {
 }
 
 .main {
-  margin-top: 10px;
   margin: 0px auto;
   padding-left: 10px;
   padding-right: 10px;
@@ -109,14 +112,17 @@ input[type="text"] {
 .box_main {
   display: flex;
   height: 80vh;
+
   div {
     padding: 5px;
     flex: 1;
   }
+
   .box_dashboard {
     display: flex;
     flex-direction: column;
-
+    flex: 2.5;
+    margin: 0 20px;
     div {
       width: 100%;
       flex: 1;
@@ -168,6 +174,14 @@ input[type="text"] {
         input {
           width: 20%;
           display: inline;
+          margin-left: 5px;
+
+          &:first-child {
+            margin: 0px;
+          }
+        }
+        button {
+          width: 100%;
         }
       }
     }
@@ -176,6 +190,30 @@ input[type="text"] {
         display: flex;
         flex-direction: column;
       }
+    }
+  }
+}
+
+.box_error {
+  width: 100vw;
+  height: 50vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 40px 100px;
+    background-color: $color_calcel;
+
+    h2 {
+      border-bottom: 1px solid black;
+    }
+
+    p {
+      font-size: 2rem;
     }
   }
 }
