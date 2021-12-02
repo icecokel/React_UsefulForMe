@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import PageInfo from "../common/PageInfoUtil";
+import { useHistory } from "react-router";
 
 /**
  * 헤더 및 네비게이션 컴포넌트
@@ -9,6 +10,7 @@ import PageInfo from "../common/PageInfoUtil";
  * @todo 네비게이션 디자인, 좌측 상단 구상 후 구현
  */
 const Header = () => {
+  const history = useHistory();
   return (
     <div className="box_header">
       <div>구상중</div>
@@ -18,7 +20,7 @@ const Header = () => {
             <button
               className="btn_header"
               onClick={() => {
-                window.location.href = item.path;
+                history.push(item.path);
               }}
             >
               {item.title}
