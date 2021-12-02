@@ -24,7 +24,7 @@ const Main = (props: any) => {
                 <li>
                   <button
                     onClick={() => {
-                      window.location.href = item.path;
+                      props.history.push(item.path);
                     }}
                   >
                     {item.title}
