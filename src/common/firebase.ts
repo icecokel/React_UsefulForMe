@@ -1,6 +1,14 @@
+import { async } from "@firebase/util";
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-import { getFirestore, collection, getDocs } from "firebase/firestore/lite";
+// import { getAnalytics } from "firebase/analytics";
+import {
+  getFirestore,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  setDoc,
+} from "firebase/firestore/lite";
 
 const {
   REACT_APP_FIREBASE_APP_KEY,
@@ -24,27 +32,33 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+// const analytics = getAnalytics(app);
 
 const db = getFirestore(app);
 
-// async function getCities(db: any) {
-//   const citiesCol = collection(db, "cities");
-//   const citySnapshot = await getDocs(citiesCol);
-//   const cityList = citySnapshot.docs.map((doc) => doc.data());
-//   return cityList;
-// }
+// 모든 문서 가져오기
+const fetchData = async (docName: string) => {
+  const querySnapshot = await getDocs(collection(db, docName));
 
-const fetchData = async () => {
-  const querySnapshot = await getDocs(collection(db, "develop"));
-  console.log(querySnapshot);
-
+  const result = [] as any;
   querySnapshot.forEach((doc) => {
-    console.log(doc);
-    console.log(doc.data());
-
+    result.push(doc.data());
     // console.log(`${doc.id} => ${doc.data()}`);
   });
+
+  return result;
 };
 
-export { fetchData };
+const searchData = async (docName: string, keyword: string) => {
+  const docRef = doc(db, docName, keyword);
+  const docSnap = await getDoc(docRef);
+
+  if (docSnap.exists()) {
+    console.log("Document data:", docSnap.data());
+  } else {
+    // doc.data() will be undefined in this case
+    console.log("No such document!");
+  }
+};
+
+export { fetchData, searchData };
