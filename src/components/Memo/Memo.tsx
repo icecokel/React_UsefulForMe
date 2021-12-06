@@ -10,6 +10,7 @@ import Header from "../Header";
  */
 const Memo = (props: any) => {
   const [memoList, setMemoList] = useState<Array<string>>();
+  const [newMemo, setNewMemo] = useState<string>();
   useEffect(() => {
     setMemos();
   });
@@ -23,6 +24,10 @@ const Memo = (props: any) => {
     setMemoList(result);
   };
 
+  const setNewText = (e: any) => {
+    setNewMemo(e.target.value);
+  };
+
   return (
     <div>
       <div>
@@ -30,9 +35,15 @@ const Memo = (props: any) => {
       </div>
       <h2>메모</h2>
       <div className="box_memo">
-        {memoList?.map((memo: any) => {
-          return <div>{memo.text}</div>;
-        })}
+        <div>
+          <input type="text" value={newMemo} onChange={setNewText} />
+          <button>입력</button>
+        </div>
+        <div>
+          {memoList?.map((memo: any) => {
+            return <div>{memo.text}</div>;
+          })}
+        </div>
       </div>
     </div>
   );
