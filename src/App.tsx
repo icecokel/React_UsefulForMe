@@ -4,6 +4,8 @@ import "./common/style.scss";
 import Main from "./components/Main";
 import Timer from "./components/Timer/Timer";
 import NotFonud from "./components/NotFound";
+import WordQuiz from "./components/wordQuiz/WordQuiz";
+import Memo from "./components/Memo/Memo";
 
 const App = () => {
   return (
@@ -19,6 +21,11 @@ const App = () => {
             path={PagePath.Timer}
             render={(props) => <Timer {...props} />}
           />
+          <Route
+            path={PagePath.WordQuiz}
+            render={(props) => <WordQuiz {...props} />}
+          />
+          <Route path={PagePath.Memo} render={(props) => <Memo {...props} />} />
           <Route component={NotFonud}></Route>
         </Switch>
       </Router>
