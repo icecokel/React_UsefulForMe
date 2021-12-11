@@ -5,6 +5,7 @@ const PAGE_INFO_LIST = [
   { title: "wordQuiz", path: PagePath.WordQuiz },
   { title: "memo", path: PagePath.Memo },
   { title: "TodoList", path: PagePath.TodoList },
+  { title: "BoardGame", path: PagePath.BoardGame },
 ];
 
 /**
