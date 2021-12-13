@@ -217,3 +217,48 @@ input[type="text"] {
     }
   }
 }
+
+.box_board_game {
+  display: flex;
+  justify-content: space-around;
+
+  -ms-user-select: none;
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+
+  font-size: 1.25rem;
+  height: 80vh;
+
+  .box_suspect {
+    flex: 1;
+    padding: 0px 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+  }
+  .box_place {
+    flex: 1;
+
+    padding: 0px 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+  }
+  .box_tool {
+    flex: 1;
+    padding: 0px 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+  }
+
+  .box_bubble {
+    padding: auto 0px;
+    text-align: center;
+  }
+}
