@@ -6,7 +6,7 @@ import Timer from "./components/Timer/Timer";
 import NotFonud from "./components/NotFound";
 import WordQuiz from "./components/wordQuiz/WordQuiz";
 import Memo from "./components/Memo/Memo";
-
+import BoardGame from "./components/BoardGame/BoardGame";
 const App = () => {
   return (
     <div className="main">
@@ -26,6 +26,10 @@ const App = () => {
             render={(props) => <WordQuiz {...props} />}
           />
           <Route path={PagePath.Memo} render={(props) => <Memo {...props} />} />
+          <Route
+            path={PagePath.BoardGame}
+            render={(props) => <BoardGame {...props} />}
+          />
           <Route component={NotFonud}></Route>
         </Switch>
       </Router>
