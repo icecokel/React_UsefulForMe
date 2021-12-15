@@ -1,4 +1,3 @@
-import { async } from "@firebase/util";
 import { initializeApp } from "firebase/app";
 // import { getAnalytics } from "firebase/analytics";
 import {
@@ -61,4 +60,10 @@ const searchData = async (docName: string, keyword: string) => {
   }
 };
 
-export { fetchData, searchData };
+const insertData = async (docName: string, params: any) => {
+  await setDoc(doc(db, docName, "test"), {
+    test: "TEST",
+  });
+};
+
+export { fetchData, searchData, insertData };
