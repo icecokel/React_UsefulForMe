@@ -5,7 +5,9 @@ const FirebaseService = {
     return await fetchData("memo");
   },
 
-  saveMemo: async (params: any) => {
+  saveMemo: async (text: string) => {
+    const params = { text: text };
+
     return await insertData("memo", params);
   },
 };
