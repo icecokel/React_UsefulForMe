@@ -21,8 +21,10 @@ const Memo = (props: any) => {
    * 현재 DB 상태에 따라서 화면에 뿌려줌.
    * 입력 버튼을 누리면, STATE를 수정해서 화면에 뿌려줌 (DB에 저장 안함)
    * 마지막에 저장 버튼을 누르면 (현재 상태를 DB에 저장)
+   * 따라서 항목별 제거가 가능해야함.
    *
    * - 통신 횟수를 줄이기 위함.
+   *
    */
 
   /**
@@ -68,8 +70,13 @@ const Memo = (props: any) => {
           <button onClick={saveMemo}> 입력</button>
         </div>
         <div>
-          {memoList?.map((memo: any) => {
-            return <div>{memo.text}</div>;
+          {memoList?.map((memo, index) => {
+            return (
+              <div>
+                <span>{memo.text}</span>
+                <button onClick={() => {}}> delete</button>
+              </div>
+            );
           })}
         </div>
       </div>
