@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { transpileModule } from "typescript";
 import FirebaseService from "../../common/FirebaseService";
 import Header from "../Header";
 
@@ -9,7 +10,7 @@ import Header from "../Header";
  * @since 2021/12/05
  */
 const Memo = (props: any) => {
-  const [memoList, setMemoList] = useState<Array<string>>();
+  const [memoList, setMemoList] = useState<Array<any>>();
   const [newMemo, setNewMemo] = useState<string>();
   useEffect(() => {
     setMemos();
@@ -33,14 +34,22 @@ const Memo = (props: any) => {
     setMemoList(result);
   };
 
-  const setNewText = (e: any) => {
-    setNewMemo(e.target.value);
+  const saveMemo = () => {
+    if (!memoList || !newMemo) {
+      return;
+    }
+    const temp = memoList.slice();
+
+    temp.push({ text: newMemo });
+    console.log(temp);
+
+    setMemoList(temp);
+    setNewMemo("");
   };
 
-  const saveMemo = () => {
+  const saveDb = () => {
     FirebaseService.saveMemo("TEST!!");
   };
-
   return (
     <div>
       <div>
@@ -49,7 +58,13 @@ const Memo = (props: any) => {
       <h2>메모</h2>
       <div className="box_memo">
         <div>
-          <input type="text" value={newMemo} onChange={setNewText} />
+          <input
+            type="text"
+            value={newMemo}
+            onChange={(e: any) => {
+              setNewMemo(e.target.value);
+            }}
+          />
           <button onClick={saveMemo}> 입력</button>
         </div>
         <div>
