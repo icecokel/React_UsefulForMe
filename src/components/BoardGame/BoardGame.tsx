@@ -41,17 +41,17 @@ const BoardGame = (props: any) => {
       <div className="box_board_game">
         <div className="box_suspect">
           {Object.entries(SuspectList).map(([key, value]) => {
-            return <Bubble label={value} />;
+            return <Bubble label={value} id={key} />;
           })}
         </div>
         <div className="box_place">
           {Object.entries(PlaceList).map(([key, value]) => {
-            return <Bubble label={value} />;
+            return <Bubble label={value} id={key} />;
           })}
         </div>
         <div className="box_tool">
           {Object.entries(ToolList).map(([key, value]) => {
-            return <Bubble label={value} />;
+            return <Bubble label={value} id={key} />;
           })}
         </div>
       </div>
