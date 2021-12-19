@@ -43,7 +43,6 @@ const Memo = (props: any) => {
     const temp = memoList.slice();
 
     temp.push({ text: newMemo });
-    console.log(temp);
 
     setMemoList(temp);
     setNewMemo("");
@@ -51,6 +50,12 @@ const Memo = (props: any) => {
 
   const saveDb = () => {
     FirebaseService.saveMemo("TEST!!");
+  };
+
+  const onClickDeleteButton = (index: any) => {
+    const temp = memoList?.filter((memo, memoIndex) => index !== memoIndex);
+
+    setMemoList(temp);
   };
   return (
     <div>
@@ -74,7 +79,10 @@ const Memo = (props: any) => {
             return (
               <div>
                 <span>{memo.text}</span>
-                <button onClick={() => {}}> delete</button>
+                <button onClick={() => onClickDeleteButton(index)}>
+                  {" "}
+                  delete
+                </button>
               </div>
             );
           })}
