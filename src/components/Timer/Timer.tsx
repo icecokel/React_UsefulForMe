@@ -1,5 +1,5 @@
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Header from "../Header";
 
 const SECOND_OF_MINUTE = 60;
@@ -24,6 +24,9 @@ const Timer = (props: any) => {
   const [isEnableRestart, setIsEnableRestart] = useState<boolean>(false);
   const [isPlayingSounds, setIsPlayingSounds] = useState<boolean>(false);
   const trainSound = new Audio("/sounds/Alarm Clock.mp3");
+  const customHourInput = useRef();
+  const customMinuteInput = useRef();
+  const customSecondInput = useRef();
 
   useEffect(() => {}, [sec, isPlaying]);
 
@@ -206,7 +209,13 @@ const Timer = (props: any) => {
             <h4>커스텀 설정</h4>
             <p> ** 최대 23시간 59분 50초 까지 가능합니다.</p>
             <div>
-              <input type="number" id="customHour" max={23} /> 시
+              <input
+                type="number"
+                id="customHour"
+                max={23}
+                ref={customHourInput}
+              />
+              시
               <input type="number" id="customMinute" max={59} /> 분
               <input type="number" id="customSecond" max={59} /> 초
               <button onClick={onClickSetCutomerButton}>시작</button>
