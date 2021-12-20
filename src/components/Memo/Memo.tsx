@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { transpileModule } from "typescript";
 import FirebaseService from "../../common/FirebaseService";
 import Header from "../Header";
 
@@ -54,7 +53,6 @@ const Memo = (props: any) => {
 
   const onClickDeleteButton = (index: any) => {
     const temp = memoList?.filter((memo, memoIndex) => index !== memoIndex);
-
     setMemoList(temp);
   };
   return (
