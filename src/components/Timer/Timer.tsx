@@ -24,9 +24,9 @@ const Timer = (props: any) => {
   const [isEnableRestart, setIsEnableRestart] = useState<boolean>(false);
   const [isPlayingSounds, setIsPlayingSounds] = useState<boolean>(false);
   const trainSound = new Audio("/sounds/Alarm Clock.mp3");
-  const customHourInput = useRef();
-  const customMinuteInput = useRef();
-  const customSecondInput = useRef();
+  const customHourInput = useRef<any>();
+  const customMinuteInput = useRef<any>();
+  const customSecondInput = useRef<any>();
 
   useEffect(() => {}, [sec, isPlaying]);
 
@@ -74,20 +74,10 @@ const Timer = (props: any) => {
    * 커스텀 시간 설정
    */
   const onClickSetCutomerButton = () => {
-    const customHour = document.querySelector(
-      "#customHour"
-    ) as HTMLInputElement;
-    const customMinute = document.querySelector(
-      "#customMinute"
-    ) as HTMLInputElement;
-    const customSecond = document.querySelector(
-      "#customSecond"
-    ) as HTMLInputElement;
-
     const customTime =
-      inputElementValueToNumber(customHour) * SECOND_OF_HOUR +
-      inputElementValueToNumber(customMinute) * SECOND_OF_MINUTE +
-      inputElementValueToNumber(customSecond);
+      inputElementValueToNumber(customHourInput.current) * SECOND_OF_HOUR +
+      inputElementValueToNumber(customMinuteInput.current) * SECOND_OF_MINUTE +
+      inputElementValueToNumber(customSecondInput.current);
 
     setSec(customTime);
     setIsPlaying(true);
@@ -114,7 +104,7 @@ const Timer = (props: any) => {
       return number * -1;
     }
 
-    if (target.id === "customHour" && number > 24) {
+    if (target === customHourInput.current && number > 24) {
       target.value = 23 + "";
       return 23;
     }
@@ -209,15 +199,11 @@ const Timer = (props: any) => {
             <h4>커스텀 설정</h4>
             <p> ** 최대 23시간 59분 50초 까지 가능합니다.</p>
             <div>
-              <input
-                type="number"
-                id="customHour"
-                max={23}
-                ref={customHourInput}
-              />
+              <input type="number" max={23} ref={customHourInput} />
               시
-              <input type="number" id="customMinute" max={59} /> 분
-              <input type="number" id="customSecond" max={59} /> 초
+              <input type="number" max={59} ref={customMinuteInput} />
+              분
+              <input type="number" max={59} ref={customSecondInput} />초
               <button onClick={onClickSetCutomerButton}>시작</button>
             </div>
           </div>
