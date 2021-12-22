@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import FirebaseService from "../../common/FirebaseService";
 import Header from "../Header";
 
@@ -11,6 +11,7 @@ import Header from "../Header";
 const Memo = (props: any) => {
   const [memoList, setMemoList] = useState<Array<any>>();
   const [newMemo, setNewMemo] = useState<string>();
+  const seq = useRef<number>(0);
   useEffect(() => {
     setMemos();
   }, []);
@@ -20,9 +21,15 @@ const Memo = (props: any) => {
    * 현재 DB 상태에 따라서 화면에 뿌려줌.
    * 입력 버튼을 누리면, STATE를 수정해서 화면에 뿌려줌 (DB에 저장 안함)
    * 마지막에 저장 버튼을 누르면 (현재 상태를 DB에 저장)
-   * 따라서 항목별 제거가 가능해야함.
    *
    * - 통신 횟수를 줄이기 위함.
+   *
+   * firebase에서 fetch한 데이터의 갯수를 context에 저장.
+   * - 데시보드에 표현하기 위함.
+   *
+   * firebase에서 가져온갯수만큼 useRef 수를 증가 시킴
+   * - useRef를 순번으로 사용하기 위함.
+   *
    *
    */
 
@@ -78,7 +85,6 @@ const Memo = (props: any) => {
               <div>
                 <span>{memo.text}</span>
                 <button onClick={() => onClickDeleteButton(index)}>
-                  {" "}
                   delete
                 </button>
               </div>
