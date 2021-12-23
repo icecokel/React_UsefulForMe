@@ -12,6 +12,7 @@ const Memo = (props: any) => {
   const [memoList, setMemoList] = useState<Array<any>>();
   const [newMemo, setNewMemo] = useState<string>();
   const seq = useRef<number>(0);
+
   useEffect(() => {
     setMemos();
   }, []);
@@ -39,6 +40,7 @@ const Memo = (props: any) => {
   const setMemos = async () => {
     const result = await FirebaseService.fetchMemo();
 
+    seq.current = result.length;
     setMemoList(result);
   };
 
