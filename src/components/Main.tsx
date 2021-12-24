@@ -1,3 +1,4 @@
+import { useState } from "react";
 import PageInfo from "../common/PageInfoUtil";
 
 /**
@@ -7,6 +8,11 @@ import PageInfo from "../common/PageInfoUtil";
  * @since 2021/11/24
  */
 const Main = (props: any) => {
+  const [memoCount, setMemoCount] = useState<number>(0);
+
+  /**
+   * Context에서 메모 갯수를 가져와서 State에 적재
+   */
   return (
     <div>
       <h2>메인</h2>
@@ -14,7 +20,9 @@ const Main = (props: any) => {
         <div className="box_dashboard">
           <h4>대시보드</h4>
           <div>
-            <h1>구상중</h1>
+            <ul>
+              <li>{"메모 개수 : " + memoCount}</li>
+            </ul>
           </div>
         </div>
         <div className="box_menu">
