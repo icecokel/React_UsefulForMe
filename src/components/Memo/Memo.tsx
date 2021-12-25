@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import FirebaseService from "../../common/FirebaseService";
 import Header from "../Header";
+import { useContextDispatch } from "../../Context";
 
 /**
  * 메모 컴포넌트
@@ -40,6 +41,7 @@ const Memo = (props: any) => {
     const result = await FirebaseService.fetchMemo();
 
     seq.current = result.length;
+    // 메모 개수를 디스패치
     setMemoList(result);
   };
 
