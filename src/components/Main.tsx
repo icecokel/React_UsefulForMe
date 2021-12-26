@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useContextState } from "../Context";
 import PageInfo from "../common/PageInfoUtil";
 
 /**
@@ -9,6 +10,12 @@ import PageInfo from "../common/PageInfoUtil";
  */
 const Main = (props: any) => {
   const [memoCount, setMemoCount] = useState<number>(0);
+  const state = useContextState();
+  useEffect(() => {
+    if (memoCount !== state.memoCount) {
+      setMemoCount(state.memoCount);
+    }
+  });
 
   /**
    * Context에서 메모 갯수를 가져와서 State에 적재
