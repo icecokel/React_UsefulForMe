@@ -12,6 +12,7 @@ import { useContextDispatch } from "../../Context";
 const Memo = (props: any) => {
   const [memoList, setMemoList] = useState<Array<any>>();
   const [newMemo, setNewMemo] = useState<string>();
+  const dispatch = useContextDispatch();
   const seq = useRef<number>(0);
 
   useEffect(() => {
@@ -41,7 +42,7 @@ const Memo = (props: any) => {
     const result = await FirebaseService.fetchMemo();
 
     seq.current = result.length;
-    // 메모 개수를 디스패치
+    dispatch({ type: "SET_MEMO_COUNT", memoCount: result.length });
     setMemoList(result);
   };
 
