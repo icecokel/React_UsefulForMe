@@ -17,6 +17,7 @@ const Memo = (props: any) => {
 
   useEffect(() => {
     setMemos();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // 예상 기능,
@@ -26,9 +27,6 @@ const Memo = (props: any) => {
    * 마지막에 저장 버튼을 누르면 (현재 상태를 DB에 저장)
    *
    * - 통신 횟수를 줄이기 위함.
-   *
-   * firebase에서 fetch한 데이터의 갯수를 context에 저장.
-   * - 데시보드에 표현하기 위함.
    *
    * firebase에서 가져온갯수만큼 useRef 수를 증가 시킴
    * - useRef를 순번으로 사용하기 위함.
@@ -59,7 +57,7 @@ const Memo = (props: any) => {
   };
 
   const saveDb = () => {
-    FirebaseService.saveMemo("TEST!!");
+    // FirebaseService.saveMemo("TEST!!");
   };
 
   const onClickDeleteButton = (index: any) => {
@@ -94,6 +92,9 @@ const Memo = (props: any) => {
               </div>
             );
           })}
+        </div>
+        <div>
+          <button onClick={saveDb}> 저장</button>
         </div>
       </div>
     </div>
