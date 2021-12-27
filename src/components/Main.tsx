@@ -11,15 +11,15 @@ import PageInfo from "../common/PageInfoUtil";
 const Main = (props: any) => {
   const [memoCount, setMemoCount] = useState<number>(0);
   const state = useContextState();
+
   useEffect(() => {
     if (memoCount !== state.memoCount) {
       setMemoCount(state.memoCount);
     }
-  });
 
-  /**
-   * Context에서 메모 갯수를 가져와서 State에 적재
-   */
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [memoCount]);
+
   return (
     <div>
       <h2>메인</h2>
