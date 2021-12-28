@@ -57,7 +57,7 @@ const Memo = (props: any) => {
   };
 
   const saveDb = () => {
-    // FirebaseService.saveMemo("TEST!!");
+    FirebaseService.saveMemo("TEST!!");
   };
 
   const onClickDeleteButton = (index: any) => {
