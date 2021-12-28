@@ -7,6 +7,7 @@ import {
   getDoc,
   getDocs,
   setDoc,
+  addDoc,
 } from "firebase/firestore/lite";
 
 const {
@@ -64,4 +65,10 @@ const insertData = async (docName: string, params: any) => {
   await setDoc(doc(db, docName, "test"), params);
 };
 
-export { fetchData, searchData, insertData };
+const insertDoc = async (docName: string, params: any) => {
+  const docRef = await addDoc(collection(db, docName), params);
+
+  console.log(docRef);
+};
+
+export { fetchData, searchData, insertData, insertDoc };
