@@ -1,4 +1,4 @@
-import { fetchData, insertData } from "./firebase";
+import { fetchData, insertDoc, insertData } from "./firebase";
 
 const FirebaseService = {
   fetchMemo: async () => {
