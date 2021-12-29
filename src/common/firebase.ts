@@ -61,8 +61,12 @@ const searchData = async (docName: string, keyword: string) => {
   }
 };
 
-const insertData = async (docName: string, params: any) => {
-  await setDoc(doc(db, docName, "test"), params);
+const insertData = async (
+  docName: string,
+  collectionName: string,
+  params: any
+) => {
+  await setDoc(doc(db, docName, collectionName), params);
 };
 
 const insertDoc = async (docName: string, params: any) => {
