@@ -8,6 +8,7 @@ import {
   getDocs,
   setDoc,
   addDoc,
+  writeBatch,
 } from "firebase/firestore/lite";
 
 const {
@@ -35,6 +36,8 @@ const app = initializeApp(firebaseConfig);
 // const analytics = getAnalytics(app);
 
 const db = getFirestore(app);
+// Get a new write batch
+const batch = writeBatch(db);
 
 // 모든 문서 가져오기
 const fetchData = async (docName: string) => {
@@ -70,9 +73,16 @@ const insertData = async (
 };
 
 const insertDoc = async (docName: string, params: any) => {
-  const docRef = await addDoc(collection(db, docName), params);
-
-  console.log(docRef);
+  await addDoc(collection(db, docName), params);
 };
 
-export { fetchData, searchData, insertData, insertDoc };
+const insertBatch = async (docName: string, params: Array<any>) => {
+  params.forEach((param, index) => {
+    const docRef = doc(db, docName, "memo_" + index);
+    batch.set(docRef, { text: param });
+  });
+
+  batch.commit();
+};
+
+export { fetchData, searchData, insertData, insertDoc, insertBatch };
