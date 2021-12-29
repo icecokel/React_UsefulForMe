@@ -5,10 +5,14 @@ const FirebaseService = {
     return await fetchData("memo");
   },
 
-  saveMemo: async (text: string) => {
+  saveMemo: async (text: string, collectionName?: string) => {
     const params = { text: text };
 
-    return await insertData("memo", params);
+    if (collectionName) {
+      return await insertData("memo", collectionName, params);
+    } else {
+      return await insertDoc("memo", params);
+    }
   },
 };
 
