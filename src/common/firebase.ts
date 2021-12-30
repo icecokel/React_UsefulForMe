@@ -45,7 +45,9 @@ const fetchData = async (docName: string) => {
 
   const result = [] as any;
   querySnapshot.forEach((doc) => {
-    result.push(doc.data());
+    let temp = doc.data();
+    temp.id = doc.id;
+    result.push(temp);
     // console.log(`${doc.id} => ${doc.data()}`);
   });
 
