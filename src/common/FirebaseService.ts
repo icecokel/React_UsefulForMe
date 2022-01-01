@@ -1,18 +1,20 @@
-import { fetchData, insertDoc, insertData } from "./firebase";
+import { fetchData, insertDoc, insertData, insertBatch } from "./firebase";
 
 const FirebaseService = {
   fetchMemo: async () => {
     return await fetchData("memo");
   },
 
-  saveMemo: async (text: string, collectionName?: string) => {
-    const params = { text: text };
-
+  saveMemo: async (param: any, collectionName?: string) => {
     if (collectionName) {
-      return await insertData("memo", collectionName, params);
+      await insertData("memo", collectionName, param);
     } else {
-      return await insertDoc("memo", params);
+      await insertDoc("memo", param);
     }
+  },
+
+  test: async (texts: Array<string>) => {
+    await insertBatch("memo", texts);
   },
 };
 
