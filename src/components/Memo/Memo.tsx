@@ -14,11 +14,12 @@ const Memo = (props: any) => {
   const [newMemo, setNewMemo] = useState<string>();
   const dispatch = useContextDispatch();
   const seq = useRef<number>(0);
+  const needFetch = useRef<boolean>(true);
 
   useEffect(() => {
-    setMemos();
+    needFetch.current && setMemos();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  });
 
   // 예상 기능,
   /**
@@ -42,27 +43,28 @@ const Memo = (props: any) => {
     seq.current = result.length;
     dispatch({ type: "SET_MEMO_COUNT", memoCount: result.length });
     setMemoList(result);
+    needFetch.current = false;
   };
 
   const saveMemo = () => {
     if (!memoList || !newMemo) {
       return;
     }
-    const temp = memoList.slice();
-
-    temp.push({ text: newMemo });
-
-    setMemoList(temp);
+    needFetch.current = true;
+    FirebaseService.saveMemo(
+      { text: newMemo, isDeleted: false },
+      "memo_" + ++seq.current
+    );
     setNewMemo("");
   };
 
-  const saveDb = () => {
-    FirebaseService.saveMemo("TEST!!");
-  };
-
-  const onClickDeleteButton = (index: any) => {
-    const temp = memoList?.filter((memo, memoIndex) => index !== memoIndex);
-    setMemoList(temp);
+  const onClickDeleteButton = (memo: any, index: number) => {
+    needFetch.current = true;
+    if (!memo.isDeleted) {
+      FirebaseService.saveMemo({ text: memo.text, isDeleted: true }, memo.id);
+    } else {
+      // 지우는 로직
+    }
   };
   return (
     <div>
@@ -85,16 +87,13 @@ const Memo = (props: any) => {
           {memoList?.map((memo, index) => {
             return (
               <div>
-                <span>{memo.text}</span>
-                <button onClick={() => onClickDeleteButton(index)}>
+                <span>{memo.text}</span> {memo.isDeleted && "isDeleted"}
+                <button onClick={() => onClickDeleteButton(memo, index)}>
                   delete
                 </button>
               </div>
             );
           })}
-        </div>
-        <div>
-          <button onClick={saveDb}> 저장</button>
         </div>
       </div>
     </div>
