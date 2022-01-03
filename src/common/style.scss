@@ -262,3 +262,18 @@ input[type="text"] {
     text-align: center;
   }
 }
+
+.box_memo {
+  font-size: 2em;
+  .item-delete {
+    text-decoration: line-through;
+  }
+
+  button {
+    padding: 0px;
+    margin-left: 10px;
+  }
+
+  .button-delete {
+  }
+}
