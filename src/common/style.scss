@@ -265,15 +265,27 @@ input[type="text"] {
 
 .box_memo {
   font-size: 2em;
-  .item-delete {
+  .item-completed {
     text-decoration: line-through;
   }
 
   button {
-    padding: 0px;
+    padding: 4px;
     margin-left: 10px;
   }
 
-  .button-delete {
+  .button-completed {
+  }
+
+  .memo-list {
+    div {
+      padding-left: 20px;
+      padding-right: 10px;
+      display: flex;
+      align-items: center;
+      margin-top: 5px;
+      width: max-content;
+      background-color: $color_point;
+    }
   }
 }
