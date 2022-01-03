@@ -87,9 +87,14 @@ const Memo = (props: any) => {
           {memoList?.map((memo, index) => {
             return (
               <div>
-                <span>{memo.text}</span> {memo.isDeleted && "isDeleted"}
-                <button onClick={() => onClickDeleteButton(memo, index)}>
-                  delete
+                <span className={memo.isDeleted ? "item-delete" : ""}>
+                  {memo.text}
+                </span>
+                <button
+                  className={memo.isDeleted ? "button-delete" : ""}
+                  onClick={() => onClickDeleteButton(memo, index)}
+                >
+                  {memo.isDeleted ? "삭제" : "완료"}
                 </button>
               </div>
             );
