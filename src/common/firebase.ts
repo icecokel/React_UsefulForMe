@@ -9,6 +9,7 @@ import {
   setDoc,
   addDoc,
   writeBatch,
+  deleteDoc,
 } from "firebase/firestore/lite";
 
 const {
@@ -87,4 +88,15 @@ const insertBatch = async (docName: string, params: Array<any>) => {
   batch.commit();
 };
 
-export { fetchData, searchData, insertData, insertDoc, insertBatch };
+const deleteData = async (docName: string, collectionName: string) => {
+  await deleteDoc(doc(db, docName, collectionName));
+};
+
+export {
+  fetchData,
+  searchData,
+  insertData,
+  insertDoc,
+  insertBatch,
+  deleteData,
+};
