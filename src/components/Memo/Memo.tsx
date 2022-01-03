@@ -3,6 +3,7 @@ import FirebaseService from "../../common/FirebaseService";
 import Header from "../Header";
 import { useContextDispatch } from "../../Context";
 
+const PRE_MEMO_ID = "memo_";
 /**
  * 메모 컴포넌트
  *
@@ -11,6 +12,8 @@ import { useContextDispatch } from "../../Context";
  */
 const Memo = (props: any) => {
   const [memoList, setMemoList] = useState<Array<any>>();
+  const [completedMemoList, setCompletedMemoList] = useState<Array<any>>();
+
   const [newMemo, setNewMemo] = useState<string>();
   const dispatch = useContextDispatch();
   const seq = useRef<number>(0);
@@ -21,50 +24,69 @@ const Memo = (props: any) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   });
 
-  // 예상 기능,
-  /**
-   * 현재 DB 상태에 따라서 화면에 뿌려줌.
-   * 입력 버튼을 누리면, STATE를 수정해서 화면에 뿌려줌 (DB에 저장 안함)
-   * 마지막에 저장 버튼을 누르면 (현재 상태를 DB에 저장)
-   *
-   * - 통신 횟수를 줄이기 위함.
-   *
-   * firebase에서 가져온갯수만큼 useRef 수를 증가 시킴
-   * - useRef를 순번으로 사용하기 위함.
-   *
-   */
-
   /**
    * 기존 저장된 메모 목록 세팅
    */
   const setMemos = async () => {
     const result = await FirebaseService.fetchMemo();
 
-    seq.current = result.length;
+    const isNotCompletedResult = (result as Array<any>).filter(
+      (item) => !item.isCompleted
+    );
+    const isCompletedResult = (result as Array<any>).filter(
+      (item) => item.isCompleted
+    );
+
+    let lastId = 0;
+    (result as Array<any>).forEach((item) => {
+      const id = Number.parseInt((item.id as string).replace(PRE_MEMO_ID, ""));
+
+      if (lastId < id) {
+        lastId = id;
+      }
+    });
+
+    seq.current = lastId;
+
     dispatch({ type: "SET_MEMO_COUNT", memoCount: result.length });
-    setMemoList(result);
     needFetch.current = false;
+    setMemoList(isNotCompletedResult);
+    setCompletedMemoList(isCompletedResult);
   };
 
-  const saveMemo = () => {
+  /**
+   * 새로운 메모를 Firebase에 저장
+   * @returns
+   */
+  const onClickInsertMemoButton = () => {
     if (!memoList || !newMemo) {
       return;
     }
     needFetch.current = true;
-    FirebaseService.saveMemo(
-      { text: newMemo, isDeleted: false },
-      "memo_" + ++seq.current
+    FirebaseService.setMemo(
+      { text: newMemo, isCompleted: false },
+      PRE_MEMO_ID + ++seq.current
     );
+    setMemos();
     setNewMemo("");
   };
 
-  const onClickDeleteButton = (memo: any, index: number) => {
+  /**
+   * 메모를 완료 또는, 삭제
+   * 완료 시 메모의 isCompleted항목 수정
+   * 삭제 시 데이터 Firebase에서 제거
+   *
+   * @param memo 대상 메모
+   */
+  const onClickDeleteButton = (memo: any) => {
     needFetch.current = true;
-    if (!memo.isDeleted) {
-      FirebaseService.saveMemo({ text: memo.text, isDeleted: true }, memo.id);
+    if (!memo.isCompleted) {
+      FirebaseService.setMemo({ text: memo.text, isCompleted: true }, memo.id);
     } else {
-      // 지우는 로직
+      FirebaseService.deleteMemo(memo.id);
     }
+
+    setMemos();
   };
   return (
     <div>
@@ -81,20 +103,33 @@ const Memo = (props: any) => {
               setNewMemo(e.target.value);
             }}
           />
-          <button onClick={saveMemo}> 입력</button>
+          <button onClick={onClickInsertMemoButton}> 입력</button>
         </div>
-        <div>
-          {memoList?.map((memo, index) => {
+        <div className="memo-list">
+          <h4>남은 메모</h4>
+          {memoList?.map((memo) => {
             return (
               <div>
-                <span className={memo.isDeleted ? "item-delete" : ""}>
-                  {memo.text}
-                </span>
+                <span>{memo.text}</span>
+                <button onClick={() => onClickDeleteButton(memo)}>
+                  {"Ok"}
+                </button>
+              </div>
+            );
+          })}
+        </div>
+        <hr />
+        <div className="memo-list">
+          <h4>완료한 메모</h4>
+          {completedMemoList?.map((memo) => {
+            return (
+              <div>
+                <span className={"item-completed"}>{memo.text}</span>
                 <button
-                  className={memo.isDeleted ? "button-delete" : ""}
-                  onClick={() => onClickDeleteButton(memo, index)}
+                  className={"button-completed"}
+                  onClick={() => onClickDeleteButton(memo)}
                 >
-                  {memo.isDeleted ? "삭제" : "완료"}
+                  {"X"}
                 </button>
               </div>
             );
