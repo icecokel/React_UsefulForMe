@@ -2,7 +2,7 @@ import {
   fetchData,
   insertDoc,
   insertData,
-  insertBatch,
+  setBatch,
   deleteData,
 } from "./firebase";
 
@@ -20,11 +20,15 @@ const FirebaseService = {
   },
 
   deleteMemo: async (collectionName: string) => {
-    deleteData("memo", collectionName);
+    await deleteData("memo", collectionName);
   },
 
-  test: async (texts: Array<string>) => {
-    await insertBatch("memo", texts);
+  batchSetMemo: async (memos: Array<string>) => {
+    await setBatch("memo", memos);
+  },
+
+  batchDeleteMemo: async (texts: Array<string>) => {
+    // await insertBatch("memo", texts);
   },
 };
 
