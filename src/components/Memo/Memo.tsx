@@ -15,12 +15,14 @@ const Memo = (props: any) => {
   const [completedMemoList, setCompletedMemoList] = useState<Array<any>>();
 
   const [newMemo, setNewMemo] = useState<string>();
+  const [completeList, setCompleteList] = useState<Array<any>>([]);
   const dispatch = useContextDispatch();
   const seq = useRef<number>(0);
   const needFetch = useRef<boolean>(true);
 
   useEffect(() => {
     needFetch.current && setMemos();
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   });
 
@@ -58,12 +60,12 @@ const Memo = (props: any) => {
    * 새로운 메모를 Firebase에 저장
    * @returns
    */
-  const onClickInsertMemoButton = () => {
+  const onClickInsertMemoButton = async () => {
     if (!memoList || !newMemo) {
       return;
     }
     needFetch.current = true;
-    FirebaseService.setMemo(
+    await FirebaseService.setMemo(
       { text: newMemo, isCompleted: false },
       PRE_MEMO_ID + ++seq.current
     );
@@ -88,6 +90,18 @@ const Memo = (props: any) => {
 
     setMemos();
   };
+
+  const onClickBatchCompleteButton = async () => {
+    const temp = [] as any;
+
+    completeList?.forEach((item) => {
+      item.isCompleted = true;
+      temp.push(item);
+    });
+
+    await FirebaseService.batchSetMemo(temp);
+    await setMemos();
+  };
   return (
     <div>
       <div>
@@ -111,7 +125,23 @@ const Memo = (props: any) => {
             return (
               <div>
                 <label>
-                  <input type="checkbox" />
+                  <input
+                    type="checkbox"
+                    checked={completeList?.includes(memo)}
+                    onClick={(e) => {
+                      const { checked } = e.target as HTMLInputElement;
+                      if (checked) {
+                        const temp = [...completeList];
+                        temp.push(memo);
+                        setCompleteList(temp);
+                      } else {
+                        const temp = completeList?.filter(
+                          (item) => item.id !== memo.id
+                        );
+                        setCompleteList(temp);
+                      }
+                    }}
+                  />
                   <span>{memo.text}</span>
                 </label>
                 <button onClick={() => onClickDeleteButton(memo)}>
@@ -122,7 +152,7 @@ const Memo = (props: any) => {
           })}
         </div>
         <hr />
-        <button>선택 완료</button>
+        <button onClick={onClickBatchCompleteButton}>선택된 항목 완료</button>
         <hr />
         <div className="memo-list">
           <h4>완료한 메모</h4>
@@ -143,7 +173,7 @@ const Memo = (props: any) => {
             );
           })}
           <hr />
-          <button>선택 삭제</button>
+          <button>선택된 항목 삭제</button>
         </div>
       </div>
     </div>
