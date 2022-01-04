@@ -79,24 +79,16 @@ const insertDoc = async (docName: string, params: any) => {
   await addDoc(collection(db, docName), params);
 };
 
-const insertBatch = async (docName: string, params: Array<any>) => {
-  params.forEach((param, index) => {
-    const docRef = doc(db, docName, "memo_" + index);
-    batch.set(docRef, { text: param });
+const setBatch = async (docName: string, params: Array<any>) => {
+  params.forEach((param) => {
+    const docRef = doc(db, docName, param.id);
+    batch.set(docRef, param);
   });
-
-  batch.commit();
+  await batch.commit();
 };
 
 const deleteData = async (docName: string, collectionName: string) => {
   await deleteDoc(doc(db, docName, collectionName));
 };
 
-export {
-  fetchData,
-  searchData,
-  insertData,
-  insertDoc,
-  insertBatch,
-  deleteData,
-};
+export { fetchData, searchData, insertData, insertDoc, setBatch, deleteData };
