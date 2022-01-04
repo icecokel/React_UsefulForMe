@@ -110,7 +110,10 @@ const Memo = (props: any) => {
           {memoList?.map((memo) => {
             return (
               <div>
-                <span>{memo.text}</span>
+                <label>
+                  <input type="checkbox" />
+                  <span>{memo.text}</span>
+                </label>
                 <button onClick={() => onClickDeleteButton(memo)}>
                   {"Ok"}
                 </button>
@@ -119,12 +122,17 @@ const Memo = (props: any) => {
           })}
         </div>
         <hr />
+        <button>선택 완료</button>
+        <hr />
         <div className="memo-list">
           <h4>완료한 메모</h4>
           {completedMemoList?.map((memo) => {
             return (
               <div>
-                <span className={"item-completed"}>{memo.text}</span>
+                <label>
+                  <input type="checkbox" />
+                  <span className={"item-completed"}>{memo.text}</span>
+                </label>
                 <button
                   className={"button-completed"}
                   onClick={() => onClickDeleteButton(memo)}
@@ -134,6 +142,8 @@ const Memo = (props: any) => {
               </div>
             );
           })}
+          <hr />
+          <button>선택 삭제</button>
         </div>
       </div>
     </div>
