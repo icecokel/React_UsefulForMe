@@ -19,6 +19,7 @@ const Memo = (props: any) => {
   const dispatch = useContextDispatch();
   const seq = useRef<number>(0);
   const needFetch = useRef<boolean>(true);
+  const isRunBatch = useRef<boolean>(false);
 
   useEffect(() => {
     needFetch.current && setMemos();
@@ -80,18 +81,25 @@ const Memo = (props: any) => {
    *
    * @param memo 대상 메모
    */
-  const onClickDeleteButton = (memo: any) => {
+  const onClickDeleteButton = async (memo: any) => {
     needFetch.current = true;
     if (!memo.isCompleted) {
-      FirebaseService.setMemo({ text: memo.text, isCompleted: true }, memo.id);
+      await FirebaseService.setMemo(
+        { text: memo.text, isCompleted: true },
+        memo.id
+      );
     } else {
-      FirebaseService.deleteMemo(memo.id);
+      await FirebaseService.deleteMemo(memo.id);
     }
 
     setMemos();
   };
 
   const onClickBatchCompleteButton = async () => {
+    if (isRunBatch.current) {
+      alert("배치진행중");
+      return;
+    }
     const temp = [] as any;
 
     completeList?.forEach((item) => {
@@ -99,7 +107,9 @@ const Memo = (props: any) => {
       temp.push(item);
     });
 
+    isRunBatch.current = true;
     await FirebaseService.batchSetMemo(temp);
+    isRunBatch.current = false;
     await setMemos();
   };
   return (
