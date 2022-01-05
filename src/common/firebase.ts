@@ -37,8 +37,6 @@ const app = initializeApp(firebaseConfig);
 // const analytics = getAnalytics(app);
 
 const db = getFirestore(app);
-// Get a new write batch
-const batch = writeBatch(db);
 
 // 모든 문서 가져오기
 const fetchData = async (docName: string) => {
@@ -79,7 +77,12 @@ const insertDoc = async (docName: string, params: any) => {
   await addDoc(collection(db, docName), params);
 };
 
+/**
+ * @todo 첫번째 배치 작업은 실행가능 두번 째 배치 작업 때 실패함. 원인 분석 필요
+ */
 const setBatch = async (docName: string, params: Array<any>) => {
+  // Get a new write batch
+  const batch = writeBatch(db);
   params.forEach((param) => {
     const docRef = doc(db, docName, param.id);
     batch.set(docRef, param);
