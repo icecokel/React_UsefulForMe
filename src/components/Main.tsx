@@ -36,7 +36,7 @@ const Main = (props: any) => {
           <ul>
             {PageInfo.getPageInfo().map((item) => {
               return (
-                <li>
+                <li key={"li_" + item.path}>
                   <button
                     onClick={() => {
                       props.history.push(item.path);
