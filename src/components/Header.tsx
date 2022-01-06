@@ -15,9 +15,10 @@ const Header = () => {
     <div className="box_header">
       <div>구상중</div>
       <div className="box_btn">
-        {PageInfo.getPageInfo().map((item) => {
+        {PageInfo.getPageInfo().map((item, index) => {
           return (
             <button
+              key={"item_" + index}
               className="btn_header"
               onClick={() => {
                 history.push(item.path);
