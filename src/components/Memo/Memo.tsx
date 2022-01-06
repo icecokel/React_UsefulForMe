@@ -131,13 +131,13 @@ const Memo = (props: any) => {
         </div>
         <div className="memo-list">
           <h4>남은 메모</h4>
-          {memoList?.map((memo) => {
+          {memoList?.map((memo, index) => {
             return (
-              <div>
+              <div key={"memo_div_" + index}>
                 <label>
                   <input
                     type="checkbox"
-                    checked={completeList?.includes(memo)}
+                    defaultChecked={completeList?.includes(memo)}
                     onClick={(e) => {
                       const { checked } = e.target as HTMLInputElement;
                       if (checked) {
@@ -166,9 +166,9 @@ const Memo = (props: any) => {
         <hr />
         <div className="memo-list">
           <h4>완료한 메모</h4>
-          {completedMemoList?.map((memo) => {
+          {completedMemoList?.map((memo, index) => {
             return (
-              <div>
+              <div key={"momo_completed_" + index}>
                 <label>
                   <input type="checkbox" />
                   <span className={"item-completed"}>{memo.text}</span>
