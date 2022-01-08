@@ -8,23 +8,23 @@ import {
 
 const FirebaseService = {
   fetchTodoList: async () => {
-    return await fetchData("memo");
+    return await fetchData("todo");
   },
 
   setTodo: async (param: any, collectionName?: string) => {
     if (collectionName) {
-      await insertData("memo", collectionName, param);
+      await insertData("todo", collectionName, param);
     } else {
-      await insertDoc("memo", param);
+      await insertDoc("todo", param);
     }
   },
 
   deleteTodo: async (collectionName: string) => {
-    await deleteData("memo", collectionName);
+    await deleteData("todo", collectionName);
   },
 
-  batchSetTodo: async (memos: Array<string>) => {
-    await setBatch("memo", memos);
+  batchSetTodo: async (todos: Array<string>) => {
+    await setBatch("todo", todos);
   },
 
   batchDeleteTodo: async (texts: Array<string>) => {
