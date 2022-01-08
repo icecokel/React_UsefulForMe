@@ -7,11 +7,11 @@ import {
 } from "./firebase";
 
 const FirebaseService = {
-  fetchMemo: async () => {
+  fetchTodoList: async () => {
     return await fetchData("memo");
   },
 
-  setMemo: async (param: any, collectionName?: string) => {
+  setTodo: async (param: any, collectionName?: string) => {
     if (collectionName) {
       await insertData("memo", collectionName, param);
     } else {
@@ -19,15 +19,15 @@ const FirebaseService = {
     }
   },
 
-  deleteMemo: async (collectionName: string) => {
+  deleteTodo: async (collectionName: string) => {
     await deleteData("memo", collectionName);
   },
 
-  batchSetMemo: async (memos: Array<string>) => {
+  batchSetTodo: async (memos: Array<string>) => {
     await setBatch("memo", memos);
   },
 
-  batchDeleteMemo: async (texts: Array<string>) => {
+  batchDeleteTodo: async (texts: Array<string>) => {
     // await insertBatch("memo", texts);
   },
 };
