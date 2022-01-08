@@ -8,6 +8,7 @@ import NotFonud from "./components/NotFound";
 import WordQuiz from "./components/wordQuiz/WordQuiz";
 import Memo from "./components/Memo/Memo";
 import BoardGame from "./components/BoardGame/BoardGame";
+import TodoList from "./components/TodoList/TodoList";
 const App = () => {
   return (
     <div className="main">
@@ -34,6 +35,10 @@ const App = () => {
             <Route
               path={PagePath.BoardGame}
               render={(props) => <BoardGame {...props} />}
+            />
+            <Route
+              path={PagePath.TodoList}
+              render={(props) => <TodoList {...props} />}
             />
             <Route component={NotFonud}></Route>
           </Switch>
