@@ -18,6 +18,7 @@ const TodoList = (props: any) => {
 
   const [newTodo, setNewTodo] = useState<string>();
   const [completeList, setCompleteList] = useState<Array<any>>([]);
+  const [deleteList, setDeleteList] = useState<Array<any>>([]);
   const dispatch = useContextDispatch();
   const seq = useRef<number>(0);
   const needFetch = useRef<boolean>(true);
@@ -112,6 +113,21 @@ const TodoList = (props: any) => {
     isRunBatch.current = true;
     await FirebaseService.batchSetTodo(temp);
     isRunBatch.current = false;
+    setCompleteList([]);
+    await setTodos();
+  };
+
+  const onClickBatchDeleteButton = async () => {
+    if (isRunBatch.current) {
+      alert("배치진행중");
+      return;
+    }
+    const temp = [...deleteList] as any;
+
+    isRunBatch.current = true;
+    await FirebaseService.batchDeleteTodo(temp);
+    isRunBatch.current = false;
+    setDeleteList([]);
     await setTodos();
   };
   return (
@@ -139,7 +155,7 @@ const TodoList = (props: any) => {
                 <label>
                   <input
                     type="checkbox"
-                    defaultChecked={completeList?.includes(todo)}
+                    checked={completeList?.includes(todo)}
                     onClick={(e) => {
                       const { checked } = e.target as HTMLInputElement;
                       if (checked) {
@@ -172,7 +188,23 @@ const TodoList = (props: any) => {
             return (
               <div key={"todo_completed_" + index}>
                 <label>
-                  <input type="checkbox" />
+                  <input
+                    type="checkbox"
+                    checked={deleteList?.includes(todo)}
+                    onClick={(e) => {
+                      const { checked } = e.target as HTMLInputElement;
+                      if (checked) {
+                        const temp = [...deleteList];
+                        temp.push(todo);
+                        setDeleteList(temp);
+                      } else {
+                        const temp = deleteList?.filter(
+                          (item) => item.id !== todo.id
+                        );
+                        setDeleteList(temp);
+                      }
+                    }}
+                  />
                   <span className={"item-completed"}>{todo.text}</span>
                 </label>
                 <button
@@ -185,7 +217,7 @@ const TodoList = (props: any) => {
             );
           })}
           <hr />
-          <button>선택된 항목 삭제</button>
+          <button onClick={onClickBatchDeleteButton}>선택된 항목 삭제</button>
         </div>
       </div>
     </div>
