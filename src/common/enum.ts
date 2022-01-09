@@ -4,6 +4,7 @@ export enum PagePath {
   Timer = "/timer",
   Memo = "/memo",
   WordQuiz = "/wordQuiz",
-  TodoList = "/TodoList",
-  BoardGame = "/BoardGame",
+  TodoList = "/todoList",
+  BoardGame = "/boardGame",
+  Tetris = "/tetris",
 }
