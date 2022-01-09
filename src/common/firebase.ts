@@ -80,12 +80,25 @@ const insertDoc = async (docName: string, params: any) => {
 /**
  * @todo 첫번째 배치 작업은 실행가능 두번 째 배치 작업 때 실패함. 원인 분석 필요
  */
-const setBatch = async (docName: string, params: Array<any>) => {
+const setBatch = async (docName: string, paramList: Array<any>) => {
   // Get a new write batch
   const batch = writeBatch(db);
-  params.forEach((param) => {
+  paramList.forEach((param) => {
     const docRef = doc(db, docName, param.id);
-    batch.set(docRef, param);
+    const params = { ...param };
+    delete params.id;
+    batch.set(docRef, params);
+  });
+  await batch.commit();
+};
+
+const deleteBatch = async (docName: string, paramList: Array<any>) => {
+  // Get a new write batch
+  const batch = writeBatch(db);
+
+  paramList.forEach((param) => {
+    const docRef = doc(db, docName, param.id);
+    batch.delete(docRef);
   });
   await batch.commit();
 };
@@ -94,4 +107,12 @@ const deleteData = async (docName: string, collectionName: string) => {
   await deleteDoc(doc(db, docName, collectionName));
 };
 
-export { fetchData, searchData, insertData, insertDoc, setBatch, deleteData };
+export {
+  fetchData,
+  searchData,
+  insertData,
+  insertDoc,
+  setBatch,
+  deleteData,
+  deleteBatch,
+};
