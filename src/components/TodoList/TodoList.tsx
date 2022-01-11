@@ -24,6 +24,16 @@ const TodoList = (props: any) => {
   const needFetch = useRef<boolean>(true);
   const isRunBatch = useRef<boolean>(false);
 
+  /**
+   * 개선안.
+   * 실시간으로 데이터를 set 하고 fetch 하는 방식이 아닌,
+   * 기존에 의도했던데로, 마지막에 일괄 처리 하는 것으로 진행
+   *
+   * - 데이터가 한번에 두번까지는 통신량 차이가 적으나, 그 이상으로 데이터를 set 또는 fetch 한다면, 통신량이 많아 진다고 판단
+   * - 버튼 하나 만들고 일괄 처리 로직 생성
+   * - 그외 일괄처리 시점 추가 분석
+   */
+
   useEffect(() => {
     needFetch.current && setTodos();
 
