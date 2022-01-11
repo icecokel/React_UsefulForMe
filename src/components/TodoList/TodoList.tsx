@@ -25,7 +25,7 @@ const TodoList = (props: any) => {
   const isRunBatch = useRef<boolean>(false);
 
   /**
-   * 개선안.
+   * 개선안. (실시간 데이터 전송 -> 일괄 데이터 전송)
    * 실시간으로 데이터를 set 하고 fetch 하는 방식이 아닌,
    * 기존에 의도했던데로, 마지막에 일괄 처리 하는 것으로 진행
    *
