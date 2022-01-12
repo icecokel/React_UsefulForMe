@@ -4,7 +4,8 @@ const BlockList = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 const Tetris = (props: any) => {
   const createBlock = () => {
-    console.log(Math.random());
+    const blockIndex = Math.floor(Math.random() * 10);
+    console.log(blockIndex);
   };
   return (
     <div>
