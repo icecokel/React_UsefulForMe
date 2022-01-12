@@ -9,6 +9,7 @@ import WordQuiz from "./components/wordQuiz/WordQuiz";
 import Memo from "./components/Memo/Memo";
 import BoardGame from "./components/BoardGame/BoardGame";
 import TodoList from "./components/TodoList/TodoList";
+import Tetris from "./components/Tetris/Tetris";
 const App = () => {
   return (
     <div className="main">
@@ -39,6 +40,10 @@ const App = () => {
             <Route
               path={PagePath.TodoList}
               render={(props) => <TodoList {...props} />}
+            />
+            <Route
+              path={PagePath.Tetris}
+              render={(props) => <Tetris {...props} />}
             />
             <Route component={NotFonud}></Route>
           </Switch>
