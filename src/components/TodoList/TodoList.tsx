@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import FirebaseService from "../../common/FirebaseService";
 import Header from "../Header";
 import { useContextDispatch } from "../../Context";
+import { async } from "@firebase/util";
 
 const PRE_TODO_ID = "td_";
 
@@ -21,7 +22,7 @@ const TodoList = (props: any) => {
   const [deleteList, setDeleteList] = useState<Array<any>>([]);
   const dispatch = useContextDispatch();
   const seq = useRef<number>(0);
-  const needFetch = useRef<boolean>(true);
+
   const isRunBatch = useRef<boolean>(false);
 
   /**
@@ -35,7 +36,7 @@ const TodoList = (props: any) => {
    */
 
   useEffect(() => {
-    needFetch.current && setTodos();
+    !todoList && setTodos();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   });
@@ -65,7 +66,7 @@ const TodoList = (props: any) => {
     seq.current = lastId;
 
     dispatch({ type: "SET_TODO_COUNT", todoCount: result.length });
-    needFetch.current = false;
+
     setTodoList(isNotCompletedResult);
     setCompletedTodoList(isCompletedResult);
   };
@@ -78,12 +79,18 @@ const TodoList = (props: any) => {
     if (!todoList || !newTodo) {
       return;
     }
-    needFetch.current = true;
-    await FirebaseService.setTodo(
-      { text: newTodo, isCompleted: false },
-      PRE_TODO_ID + ++seq.current
-    );
-    setTodos();
+    // needFetch.current = true;
+    // await FirebaseService.setTodo(
+    //   { text: newTodo, isCompleted: false },
+    //   PRE_TODO_ID + ++seq.current
+    // );
+
+    const tempTodo = { text: newTodo, isCompleted: false };
+    const tempTodoList = [...todoList];
+
+    tempTodoList.push(tempTodo);
+
+    setTodoList(tempTodoList);
     setNewTodo("");
   };
 
@@ -92,54 +99,56 @@ const TodoList = (props: any) => {
    * 완료 시 할 일의 isCompleted항목 수정
    * 삭제 시 데이터 Firebase에서 제거
    *
-   * @param todo 대상 메모
+   * @param targetTodo 대상 메모
    */
-  const onClickDeleteButton = async (todo: any) => {
-    needFetch.current = true;
-    if (!todo.isCompleted) {
-      await FirebaseService.setTodo(
-        { text: todo.text, isCompleted: true },
-        todo.id
+  const onClickDeleteButton = async (targetTodo: any) => {
+    if (!targetTodo.isCompleted) {
+      const tempTodoList = todoList?.filter(
+        (todo) => todo.id !== targetTodo.id
       );
+      const tempCompleteTodoList = [...(completedTodoList ?? [])];
+      tempCompleteTodoList.push(targetTodo);
+      setTodoList(tempTodoList);
+      setCompletedTodoList(tempCompleteTodoList);
     } else {
-      await FirebaseService.deleteTodo(todo.id);
+      const tempCompleteTodoList = completedTodoList?.filter(
+        (todo) => todo.id !== targetTodo.id
+      );
+      setCompletedTodoList(tempCompleteTodoList);
     }
-
-    setTodos();
   };
 
   const onClickBatchCompleteButton = async () => {
-    if (isRunBatch.current) {
-      alert("배치진행중");
-      return;
-    }
-    const temp = [] as any;
-
-    completeList?.forEach((item) => {
-      item.isCompleted = true;
-      temp.push(item);
-    });
-
-    isRunBatch.current = true;
-    await FirebaseService.batchSetTodo(temp);
-    isRunBatch.current = false;
-    setCompleteList([]);
-    await setTodos();
+    // if (isRunBatch.current) {
+    //   alert("배치진행중");
+    //   return;
+    // }
+    // const temp = [] as any;
+    // completeList?.forEach((item) => {
+    //   item.isCompleted = true;
+    //   temp.push(item);
+    // });
+    // isRunBatch.current = true;
+    // await FirebaseService.batchSetTodo(temp);
+    // isRunBatch.current = false;
+    // setCompleteList([]);
+    // await setTodos();
   };
 
   const onClickBatchDeleteButton = async () => {
-    if (isRunBatch.current) {
-      alert("배치진행중");
-      return;
-    }
-    const temp = [...deleteList] as any;
-
-    isRunBatch.current = true;
-    await FirebaseService.batchDeleteTodo(temp);
-    isRunBatch.current = false;
-    setDeleteList([]);
-    await setTodos();
+    // if (isRunBatch.current) {
+    //   alert("배치진행중");
+    //   return;
+    // }
+    // const temp = [...deleteList] as any;
+    // isRunBatch.current = true;
+    // await FirebaseService.batchDeleteTodo(temp);
+    // isRunBatch.current = false;
+    // setDeleteList([]);
+    // await setTodos();
   };
+
+  const saveTodoList = async () => {};
   return (
     <div>
       <div>
@@ -156,6 +165,7 @@ const TodoList = (props: any) => {
             }}
           />
           <button onClick={onClickInsertTodoButton}> 입력</button>
+          <button onClick={saveTodoList}> 저장</button>
         </div>
         <div className="todo-list">
           <h4>할 일 목록</h4>
