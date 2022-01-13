@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import FirebaseService from "../../common/FirebaseService";
 import Header from "../Header";
 import { useContextDispatch } from "../../Context";
-import { async } from "@firebase/util";
 
 const PRE_TODO_ID = "td_";
 
@@ -23,8 +22,6 @@ const TodoList = (props: any) => {
   const dispatch = useContextDispatch();
   const seq = useRef<number>(0);
 
-  const isRunBatch = useRef<boolean>(false);
-
   /**
    * 개선안. (실시간 데이터 전송 -> 일괄 데이터 전송)
    * 실시간으로 데이터를 set 하고 fetch 하는 방식이 아닌,
@@ -40,6 +37,78 @@ const TodoList = (props: any) => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   });
+
+  /**
+   * 새로운 할 일을 저장
+   * todoList 에 추가
+   *
+   * @returns
+   */
+  const onClickInsertTodoButton = async () => {
+    if (!todoList || !newTodo) {
+      return;
+    }
+
+    const tempTodo = { text: newTodo, isCompleted: false };
+    const tempTodoList = [...todoList];
+
+    tempTodoList.push(tempTodo);
+
+    setTodoList(tempTodoList);
+    setNewTodo("");
+  };
+
+  /**
+   * 할 일을 완료 또는, 삭제
+   * 완료 시, 대상 항목을 todoList -> completedTodoList 로 이동
+   * 삭제 시, 대상 항목을 completedTodoList에서 제거
+   *
+   * @param targetTodo 대상 메모
+   * @todos 분할 계획 및 함수 정리
+   */
+  const onClickDeleteButton = (targetTodo: any) => {
+    if (!targetTodo.isCompleted) {
+      const tempTodoList = todoList?.filter(
+        (todo) => todo.id !== targetTodo.id
+      );
+      const tempCompleteTodoList = [...(completedTodoList ?? [])];
+      tempCompleteTodoList.push(targetTodo);
+      setTodoList(tempTodoList);
+      setCompletedTodoList(tempCompleteTodoList);
+    } else {
+      const tempCompleteTodoList = completedTodoList?.filter(
+        (todo) => todo.id !== targetTodo.id
+      );
+      setCompletedTodoList(tempCompleteTodoList);
+    }
+  };
+
+  /**
+   * 체크박스 체크된 항목 todoList -> completedTodoList 로 이동
+   */
+  const onClickBatchCompleteButton = () => {
+    const tempTodoList = todoList?.filter(
+      (todo) => !completeList.includes(todo)
+    );
+    const tempCompletedTodoList = (completedTodoList ?? []).concat(
+      completeList
+    );
+
+    setTodoList(tempTodoList);
+    setCompletedTodoList(tempCompletedTodoList);
+    setCompleteList([]);
+  };
+
+  /**
+   * 체크박스 체크된 항목 completedTodoList에서 제거
+   */
+  const onClickBatchDeleteButton = () => {
+    const tempCompletedTodoList = (completedTodoList ?? []).filter(
+      (item) => !deleteList.includes(item)
+    );
+
+    setCompletedTodoList(tempCompletedTodoList);
+  };
 
   /**
    * 기존 저장된 할 일 목록 세팅
@@ -69,83 +138,6 @@ const TodoList = (props: any) => {
 
     setTodoList(isNotCompletedResult);
     setCompletedTodoList(isCompletedResult);
-  };
-
-  /**
-   * 새로운 할 일을 Firebase에 저장
-   * @returns
-   */
-  const onClickInsertTodoButton = async () => {
-    if (!todoList || !newTodo) {
-      return;
-    }
-    // needFetch.current = true;
-    // await FirebaseService.setTodo(
-    //   { text: newTodo, isCompleted: false },
-    //   PRE_TODO_ID + ++seq.current
-    // );
-
-    const tempTodo = { text: newTodo, isCompleted: false };
-    const tempTodoList = [...todoList];
-
-    tempTodoList.push(tempTodo);
-
-    setTodoList(tempTodoList);
-    setNewTodo("");
-  };
-
-  /**
-   * 할 일을 완료 또는, 삭제
-   * 완료 시 할 일의 isCompleted항목 수정
-   * 삭제 시 데이터 Firebase에서 제거
-   *
-   * @param targetTodo 대상 메모
-   */
-  const onClickDeleteButton = async (targetTodo: any) => {
-    if (!targetTodo.isCompleted) {
-      const tempTodoList = todoList?.filter(
-        (todo) => todo.id !== targetTodo.id
-      );
-      const tempCompleteTodoList = [...(completedTodoList ?? [])];
-      tempCompleteTodoList.push(targetTodo);
-      setTodoList(tempTodoList);
-      setCompletedTodoList(tempCompleteTodoList);
-    } else {
-      const tempCompleteTodoList = completedTodoList?.filter(
-        (todo) => todo.id !== targetTodo.id
-      );
-      setCompletedTodoList(tempCompleteTodoList);
-    }
-  };
-
-  const onClickBatchCompleteButton = async () => {
-    // if (isRunBatch.current) {
-    //   alert("배치진행중");
-    //   return;
-    // }
-    // const temp = [] as any;
-    // completeList?.forEach((item) => {
-    //   item.isCompleted = true;
-    //   temp.push(item);
-    // });
-    // isRunBatch.current = true;
-    // await FirebaseService.batchSetTodo(temp);
-    // isRunBatch.current = false;
-    // setCompleteList([]);
-    // await setTodos();
-  };
-
-  const onClickBatchDeleteButton = async () => {
-    // if (isRunBatch.current) {
-    //   alert("배치진행중");
-    //   return;
-    // }
-    // const temp = [...deleteList] as any;
-    // isRunBatch.current = true;
-    // await FirebaseService.batchDeleteTodo(temp);
-    // isRunBatch.current = false;
-    // setDeleteList([]);
-    // await setTodos();
   };
 
   const saveTodoList = async () => {};
