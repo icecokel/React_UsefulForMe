@@ -77,7 +77,7 @@ const TodoList = (props: any) => {
         (todo) => todo.id !== targetTodo.id
       );
       const tempCompleteTodoList = [...(completedTodoList ?? [])];
-      tempCompleteTodoList.push(targetTodo);
+      tempCompleteTodoList.push({ ...targetTodo, isCompleted: true });
       setTodoList(tempTodoList);
       setCompletedTodoList(tempCompleteTodoList);
     } else {
