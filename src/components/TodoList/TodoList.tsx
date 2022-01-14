@@ -13,6 +13,7 @@ const PRE_TODO_ID = "td_";
  */
 
 const TodoList = (props: any) => {
+  const [receivedData, setReceivedData] = useState<Array<any>>();
   const [todoList, setTodoList] = useState<Array<any>>();
   const [completedTodoList, setCompletedTodoList] = useState<Array<any>>();
 
@@ -33,7 +34,7 @@ const TodoList = (props: any) => {
    */
 
   useEffect(() => {
-    !todoList && setTodos();
+    !receivedData && setTodos();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   });
@@ -49,7 +50,11 @@ const TodoList = (props: any) => {
       return;
     }
 
-    const tempTodo = { text: newTodo, isCompleted: false };
+    const tempTodo = {
+      text: newTodo,
+      isCompleted: false,
+      id: PRE_TODO_ID + ++seq.current,
+    };
     const tempTodoList = [...todoList];
 
     tempTodoList.push(tempTodo);
@@ -90,9 +95,12 @@ const TodoList = (props: any) => {
     const tempTodoList = todoList?.filter(
       (todo) => !completeList.includes(todo)
     );
-    const tempCompletedTodoList = (completedTodoList ?? []).concat(
-      completeList
-    );
+    const tempCompletedTodoList = new Array<any>();
+
+    (completedTodoList ?? []).concat(completeList).forEach((item) => {
+      const completedTodo = { ...item, isCompleted: true };
+      tempCompletedTodoList.push(completedTodo);
+    });
 
     setTodoList(tempTodoList);
     setCompletedTodoList(tempCompletedTodoList);
@@ -138,9 +146,25 @@ const TodoList = (props: any) => {
 
     setTodoList(isNotCompletedResult);
     setCompletedTodoList(isCompletedResult);
+    setReceivedData(result);
   };
 
-  const saveTodoList = async () => {};
+  const saveTodoList = async () => {
+    if (!receivedData) {
+      return;
+    }
+
+    await FirebaseService.batchDeleteTodo(receivedData);
+
+    const sendData = todoList?.concat(completedTodoList);
+
+    if (!sendData) {
+      return;
+    }
+
+    await FirebaseService.batchSetTodo(sendData);
+  };
+
   return (
     <div>
       <div>
@@ -156,7 +180,7 @@ const TodoList = (props: any) => {
               setNewTodo(e.target.value);
             }}
           />
-          <button onClick={onClickInsertTodoButton}> 입력</button>
+          <button onClick={onClickInsertTodoButton}>입력</button>
           <button onClick={saveTodoList}> 저장</button>
         </div>
         <div className="todo-list">
