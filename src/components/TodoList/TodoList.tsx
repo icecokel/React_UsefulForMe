@@ -45,7 +45,7 @@ const TodoList = (props: any) => {
    *
    * @returns
    */
-  const onClickInsertTodoButton = async () => {
+  const onClickResistTodoButton = async () => {
     if (!todoList || !newTodo) {
       return;
     }
@@ -149,6 +149,20 @@ const TodoList = (props: any) => {
     setReceivedData(result);
   };
 
+  /**
+   * Enter 감지 및 상태 등록
+   */
+  const onPressKeyDownEnter = (e: any) => {
+    if (e.key === "Enter") {
+      onClickResistTodoButton();
+    }
+  };
+
+  /**
+   * 현 상태 일괄 저장
+   * 기존 Firebase 데이터 전소
+   * 현 State 값을 Friebase 값으로 저장
+   */
   const saveTodoList = async () => {
     if (!receivedData) {
       return;
@@ -176,11 +190,12 @@ const TodoList = (props: any) => {
           <input
             type="text"
             value={newTodo}
+            onKeyPress={onPressKeyDownEnter}
             onChange={(e: any) => {
               setNewTodo(e.target.value);
             }}
           />
-          <button onClick={onClickInsertTodoButton}>입력</button>
+          <button onClick={onClickResistTodoButton}>입력</button>
           <button onClick={saveTodoList}> 저장</button>
         </div>
         <div className="todo-list">
