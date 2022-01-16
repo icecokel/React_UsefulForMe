@@ -1,12 +1,12 @@
 import React, { useReducer, useContext, createContext, Dispatch } from "react";
 
 const initData = {
-  memoCount: 0,
+  todosCount: 0,
 };
 
 // 상태를 위한 타입
 type State = {
-  memoCount: number;
+  todosCount: number;
 };
 
 // 모든 액션들을 위한 타입
@@ -23,7 +23,7 @@ function reducer(state: State, action: Action): State {
     case "SET_TODO_COUNT":
       return {
         ...state,
-        memoCount: action.todoCount, // count가 자동완성되며, number 타입인걸 알 수 있습니다.
+        todosCount: action.todoCount, // count가 자동완성되며, number 타입인걸 알 수 있습니다.
       };
 
     default:
