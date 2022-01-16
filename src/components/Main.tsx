@@ -9,16 +9,16 @@ import PageInfo from "../common/PageInfoUtil";
  * @since 2021/11/24
  */
 const Main = (props: any) => {
-  const [memoCount, setMemoCount] = useState<number>(0);
+  const [todosCount, setTodosCount] = useState<number>(0);
   const state = useContextState();
 
   useEffect(() => {
-    if (memoCount !== state.memoCount) {
-      setMemoCount(state.memoCount);
+    if (todosCount !== state.todosCount) {
+      setTodosCount(state.todosCount);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [memoCount]);
+  }, [todosCount]);
 
   return (
     <div>
@@ -28,7 +28,7 @@ const Main = (props: any) => {
           <h4>대시보드</h4>
           <div>
             <ul>
-              <li>{"메모 개수 : " + memoCount}</li>
+              <li>{"메모 개수 : " + todosCount}</li>
             </ul>
           </div>
         </div>
