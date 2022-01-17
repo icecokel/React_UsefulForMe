@@ -289,3 +289,29 @@ input[type="text"] {
     }
   }
 }
+
+.box_memo {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  .box_title {
+    flex: 1;
+  }
+  .box_contents {
+    flex: 5;
+
+    .box_memo_title {
+      display: flex;
+      justify-content: space-between;
+
+      input {
+        flex: 3;
+        margin-right: 20px;
+      }
+
+      div {
+        flex: 1;
+      }
+    }
+  }
+}
