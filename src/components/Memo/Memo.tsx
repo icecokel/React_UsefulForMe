@@ -13,6 +13,27 @@ const Memo = (props: any) => {
         <Header />
       </div>
       <h2>메모</h2>
+      <div className="box_memo">
+        <div className="box_title">
+          <ol>
+            <li>제목1</li>
+            <li>제목2</li>
+            <li>제목3</li>
+            <li>제목4</li>
+          </ol>
+        </div>
+        <div className="box_contents">
+          <div className="box_memo_title">
+            <input type="text" value={"제목1"} />
+            <div>
+              <span>작성일 : </span>
+              <span>수정일 : </span>
+            </div>
+          </div>
+
+          <div>내용 1</div>
+        </div>
+      </div>
     </div>
   );
 };
