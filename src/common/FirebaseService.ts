@@ -31,6 +31,10 @@ const FirebaseService = {
   batchDeleteTodo: async (todos: Array<any>) => {
     await deleteBatch("todo", todos);
   },
+
+  fetchMemoList: async () => {
+    return await fetchData("memo");
+  },
 };
 
 export default FirebaseService;
