@@ -1,5 +1,6 @@
 import Header from "../Header";
-
+import FirebaseService from "../../common/FirebaseService";
+import { useEffect, useState } from "react";
 /**
  * 메모 컴포넌트
  *
@@ -7,6 +8,23 @@ import Header from "../Header";
  * @since 2021/12/05
  */
 const Memo = (props: any) => {
+  const [memoList, setMemoList] = useState<Array<any>>();
+  const [currentMemo, setCurrentMemo] = useState<any>();
+
+  useEffect(() => {
+    !memoList && setMemo();
+    console.log(memoList);
+  });
+
+  const setMemo = async () => {
+    const tempList = await FirebaseService.fetchMemoList();
+
+    if (!currentMemo) {
+      setCurrentMemo(tempList[0]);
+    }
+
+    setMemoList(tempList);
+  };
   return (
     <div>
       <div>
@@ -16,23 +34,39 @@ const Memo = (props: any) => {
       <div className="box_memo">
         <div className="box_title">
           <ol>
-            <li>제목1</li>
-            <li>제목2</li>
-            <li>제목3</li>
-            <li>제목4</li>
+            {memoList?.map((memo) => {
+              return (
+                <li
+                  onClick={() => {
+                    setCurrentMemo(memo);
+                  }}
+                >
+                  {memo.title}
+                </li>
+              );
+            })}
           </ol>
         </div>
-        <div className="box_contents">
-          <div className="box_memo_title">
-            <input type="text" value={"제목1"} />
-            <div>
-              <span>작성일 : </span>
-              <span>수정일 : </span>
+        {currentMemo && (
+          <div className="box_contents">
+            <div className="box_memo_title">
+              <input type="text" value={currentMemo.title} />
+              <div>
+                <span>
+                  작성일 :
+                  {new Date(currentMemo.createAt.seconds).toLocaleString()}
+                </span>
+                {console.log(currentMemo.updateAt)}
+                <span>
+                  수정일 :
+                  {new Date(currentMemo.updateAt.seconds).toLocaleString()}
+                </span>
+              </div>
             </div>
-          </div>
 
-          <div>내용 1</div>
-        </div>
+            <div>{currentMemo.contents}</div>
+          </div>
+        )}
       </div>
     </div>
   );
