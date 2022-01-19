@@ -5,6 +5,8 @@ $color_point: #fee715;
 $color_calcel: #fcf6f5;
 $color_alert: #a4193d;
 
+$board_radius: 5px;
+
 @import url("https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap");
 
 #root {
@@ -30,7 +32,7 @@ h6 {
   font-size: 1rem;
 }
 div {
-  border-radius: 5px;
+  border-radius: $board_radius;
 }
 
 ul {
@@ -44,7 +46,7 @@ button {
   color: $color_point;
   padding: 10px;
   margin: 2px;
-  border-radius: 5px;
+  border-radius: $board_radius;
   border: solid 1px $color_point;
   font-size: 1rem;
 
@@ -58,7 +60,7 @@ button {
 input[type="number"],
 input[type="text"] {
   border: 1px solid $color_base;
-  border-radius: 5px;
+  border-radius: $board_radius;
   margin-bottom: 1rem;
   padding: 0.4rem 0.8rem;
 
@@ -296,11 +298,20 @@ input[type="text"] {
   align-items: flex-start;
   .box_title {
     flex: 1;
+
+    .item-title-selected {
+      color: $color_alert;
+      font-weight: bold;
+    }
   }
+
   .box_contents {
     flex: 5;
-
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     .box_memo_title {
+      width: 90%;
       display: flex;
       justify-content: space-between;
 
@@ -311,7 +322,16 @@ input[type="text"] {
 
       div {
         flex: 1;
+        text-align: right;
       }
+    }
+
+    textarea {
+      border-radius: $board_radius;
+      width: 90%;
+    }
+    button {
+      min-width: 200px;
     }
   }
 }
