@@ -14,7 +14,7 @@ const Memo = (props: any) => {
 
   useEffect(() => {
     !memoList && setMemo();
-    console.log(memoList);
+    console.log(currentMemo.createAt.toDate());
   });
 
   const setMemo = async () => {
@@ -30,9 +30,12 @@ const Memo = (props: any) => {
   const formatTime = (time: Date) => {
     return `
     ${time.getFullYear().toString().slice(-2)}/
-    ${
-      time.getMonth() + 1
-    }/${time.getDate()} ${time.getHours()}:${time.getSeconds()}`;
+    ${("0" + (time.getMonth() + 1)).slice(-2)}/${("0" + time.getDate()).slice(
+      -2
+    )} ${("0" + time.getHours()).slice(-2)}:${("0" + time.getMinutes()).slice(
+      -2
+    )}`;
+    // ("0" + time.getMonth()).slice(-2)
   };
   return (
     <div>
@@ -42,10 +45,16 @@ const Memo = (props: any) => {
       <h2>메모</h2>
       <div className="box_memo">
         <div className="box_title">
+          <label>새로운 메모 만들기</label>
           <ol>
             {memoList?.map((memo) => {
               return (
                 <li
+                  className={
+                    memo.title === currentMemo.title
+                      ? "item-title-selected"
+                      : ""
+                  }
                   onClick={() => {
                     setCurrentMemo(memo);
                   }}
@@ -61,18 +70,16 @@ const Memo = (props: any) => {
             <div className="box_memo_title">
               <input type="text" value={currentMemo.title} />
               <div>
-                <span>
-                  작성일 :{formatTime(new Date(currentMemo.createAt.seconds))}
-                </span>
+                <span>작성일 :{formatTime(currentMemo.createAt.toDate())}</span>
                 <br />
-                <span>
-                  수정일 :{formatTime(new Date(currentMemo.updateAt.seconds))}
-                </span>
+                <span>수정일 :{formatTime(currentMemo.updateAt.toDate())}</span>
               </div>
             </div>
+            <hr />
             <textarea cols={100} rows={50}>
               {currentMemo.contents}
             </textarea>
+            <hr />
             <div>
               <button>저장</button>
               <button>삭제</button>
