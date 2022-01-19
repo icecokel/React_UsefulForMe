@@ -1,6 +1,7 @@
 import Header from "../Header";
 import FirebaseService from "../../common/FirebaseService";
 import { useEffect, useState } from "react";
+
 /**
  * 메모 컴포넌트
  *
@@ -24,6 +25,14 @@ const Memo = (props: any) => {
     }
 
     setMemoList(tempList);
+  };
+
+  const formatTime = (time: Date) => {
+    return `
+    ${time.getFullYear().toString().slice(-2)}/
+    ${
+      time.getMonth() + 1
+    }/${time.getDate()} ${time.getHours()}:${time.getSeconds()}`;
   };
   return (
     <div>
@@ -53,18 +62,21 @@ const Memo = (props: any) => {
               <input type="text" value={currentMemo.title} />
               <div>
                 <span>
-                  작성일 :
-                  {new Date(currentMemo.createAt.seconds).toLocaleString()}
+                  작성일 :{formatTime(new Date(currentMemo.createAt.seconds))}
                 </span>
-                {console.log(currentMemo.updateAt)}
+                <br />
                 <span>
-                  수정일 :
-                  {new Date(currentMemo.updateAt.seconds).toLocaleString()}
+                  수정일 :{formatTime(new Date(currentMemo.updateAt.seconds))}
                 </span>
               </div>
             </div>
-
-            <div>{currentMemo.contents}</div>
+            <textarea cols={100} rows={50}>
+              {currentMemo.contents}
+            </textarea>
+            <div>
+              <button>저장</button>
+              <button>삭제</button>
+            </div>
           </div>
         )}
       </div>
