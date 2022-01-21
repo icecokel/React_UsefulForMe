@@ -57,6 +57,7 @@ button {
   }
 }
 
+textarea,
 input[type="number"],
 input[type="text"] {
   border: 1px solid $color_base;
@@ -327,8 +328,7 @@ input[type="text"] {
     }
 
     textarea {
-      border-radius: $board_radius;
-      width: 90%;
+      width: 87.5%;
     }
     button {
       min-width: 200px;
