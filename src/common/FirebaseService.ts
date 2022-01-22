@@ -12,18 +12,6 @@ const FirebaseService = {
     return await fetchData("todo");
   },
 
-  setTodo: async (param: any, collectionName?: string) => {
-    if (collectionName) {
-      await insertData("todo", collectionName, param);
-    } else {
-      await insertDoc("todo", param);
-    }
-  },
-
-  deleteTodo: async (collectionName: string) => {
-    await deleteData("todo", collectionName);
-  },
-
   batchSetTodo: async (todos: Array<any>) => {
     await setBatch("todo", todos);
   },
@@ -34,6 +22,18 @@ const FirebaseService = {
 
   fetchMemoList: async () => {
     return await fetchData("memo");
+  },
+
+  setMemo: async (param: any, collectionName?: string) => {
+    if (collectionName) {
+      await insertData("memo", collectionName, param);
+    } else {
+      await insertDoc("memo", param);
+    }
+  },
+
+  deleteMemo: async (collectionName: string) => {
+    await deleteData("memo", collectionName);
   },
 };
 
