@@ -1,13 +1,17 @@
 import Header from "../Header";
 import FirebaseService from "../../common/FirebaseService";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { Timestamp } from "firebase/firestore/lite";
 
 interface MEMO {
   title: string;
   contents: string;
   createAt: any;
   updateAt: any;
+  id: string;
 }
+
+const PRE_MEMO_ID = "memo_";
 
 /**
  * 메모 컴포넌트
@@ -18,6 +22,7 @@ interface MEMO {
 const Memo = (props: any) => {
   const [memoList, setMemoList] = useState<Array<MEMO>>();
   const [currentMemo, setCurrentMemo] = useState<MEMO>();
+  const memoSeq = useRef<number>(0);
 
   useEffect(() => {
     !memoList && setMemo();
@@ -30,6 +35,7 @@ const Memo = (props: any) => {
       setCurrentMemo(tempList[0]);
     }
 
+    memoSeq.current = tempList.length;
     setMemoList(tempList);
   };
 
@@ -39,9 +45,26 @@ const Memo = (props: any) => {
       contents: "",
       createAt: undefined,
       updateAt: undefined,
+      id: "",
     };
 
     setCurrentMemo(newMemo);
+  };
+
+  const updateMemo = async () => {
+    if (!currentMemo) {
+      return;
+    }
+
+    if (currentMemo.id) {
+      await FirebaseService.setMemo(currentMemo, currentMemo.id);
+    } else {
+      const now = new Date();
+      const temp = { ...currentMemo, createAt: now, updateAt: now };
+
+      await FirebaseService.setMemo(temp, PRE_MEMO_ID + ++memoSeq.current);
+      setMemo();
+    }
   };
 
   const formatTime = (time: Date) => {
@@ -63,9 +86,10 @@ const Memo = (props: any) => {
         <div className="box_title">
           <label onClick={createNewMemo}>새로운 메모 만들기</label>
           <ol>
-            {memoList?.map((memo) => {
+            {memoList?.map((memo, index) => {
               return (
                 <li
+                  key={"title_" + index}
                   className={
                     currentMemo && memo.title === currentMemo.title
                       ? "item-title-selected"
@@ -88,6 +112,9 @@ const Memo = (props: any) => {
                 type="text"
                 value={currentMemo.title}
                 placeholder="제목을 입력해주세요."
+                onChange={(e) =>
+                  setCurrentMemo({ ...currentMemo, title: e.target.value })
+                }
               />
               <div>
                 <span>
@@ -111,10 +138,13 @@ const Memo = (props: any) => {
               rows={50}
               value={currentMemo.contents}
               placeholder="내용을 입력해주세요."
+              onChange={(e) =>
+                setCurrentMemo({ ...currentMemo, contents: e.target.value })
+              }
             ></textarea>
             <hr />
             <div>
-              <button>저장</button>
+              <button onClick={updateMemo}>저장</button>
               <button>삭제</button>
             </div>
           </div>
