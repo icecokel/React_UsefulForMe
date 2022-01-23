@@ -31,11 +31,20 @@ const Memo = (props: any) => {
   const setMemo = async () => {
     const tempList = await FirebaseService.fetchMemoList();
 
+    let maxSeq = 0;
+
+    (tempList as Array<MEMO>).forEach((item) => {
+      maxSeq =
+        Number.parseInt(item.id.replace(PRE_MEMO_ID, "")) > maxSeq
+          ? Number.parseInt(item.id.replace(PRE_MEMO_ID, ""))
+          : maxSeq;
+    });
+
+    memoSeq.current = maxSeq + 1;
+
     if (!currentMemo) {
       setCurrentMemo(tempList[0]);
     }
-
-    memoSeq.current = tempList.length;
     setMemoList(tempList);
   };
 
@@ -59,7 +68,7 @@ const Memo = (props: any) => {
     if (currentMemo.id) {
       await FirebaseService.setMemo(currentMemo, currentMemo.id);
     } else {
-      const now = new Date();
+      const now = Timestamp.fromDate(new Date());
       const temp = { ...currentMemo, createAt: now, updateAt: now };
 
       await FirebaseService.setMemo(temp, PRE_MEMO_ID + ++memoSeq.current);
