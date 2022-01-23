@@ -28,6 +28,70 @@ const Memo = (props: any) => {
     !memoList && setMemo();
   });
 
+  /**
+   * 새 메모
+   * 현재 메모를 비움
+   */
+  const onClickCreateNewMemo = () => {
+    const newMemo: MEMO = {
+      title: "",
+      contents: "",
+      createAt: undefined,
+      updateAt: undefined,
+      id: "",
+    };
+
+    setCurrentMemo(newMemo);
+  };
+
+  /**
+   * 메모저장
+   * 기존 메모 - 업데이트
+   * 신규 메모 - 생성
+   * @returns
+   */
+  const onClickUpdateMemo = async () => {
+    if (!currentMemo) {
+      return;
+    }
+
+    if (currentMemo.id) {
+      await FirebaseService.setMemo(currentMemo, currentMemo.id);
+    } else {
+      const now = Timestamp.fromDate(new Date());
+      const temp = { ...currentMemo, createAt: now, updateAt: now };
+
+      await FirebaseService.setMemo(temp, PRE_MEMO_ID + ++memoSeq.current);
+      setMemo();
+    }
+  };
+
+  /**
+   * 현재 메모 삭제
+   *
+   * @returns
+   */
+  const onClickDeleteMemo = async () => {
+    if (!currentMemo) {
+      return;
+    }
+    FirebaseService.deleteMemo(currentMemo?.id);
+    setMemo();
+  };
+
+  const formatTime = (time: Date) => {
+    return `
+    ${time.getFullYear().toString().slice(-2)}/
+    ${("0" + (time.getMonth() + 1)).slice(-2)}/${("0" + time.getDate()).slice(
+      -2
+    )} ${("0" + time.getHours()).slice(-2)}:${("0" + time.getMinutes()).slice(
+      -2
+    )}`;
+  };
+
+  /**
+   * 기존 저장된 메모 목록 세팅
+   */
   const setMemo = async () => {
     const tempList = await FirebaseService.fetchMemoList();
 
@@ -48,51 +112,6 @@ const Memo = (props: any) => {
     setMemoList(tempList);
   };
 
-  const createNewMemo = () => {
-    const newMemo: MEMO = {
-      title: "",
-      contents: "",
-      createAt: undefined,
-      updateAt: undefined,
-      id: "",
-    };
-
-    setCurrentMemo(newMemo);
-  };
-
-  const updateMemo = async () => {
-    if (!currentMemo) {
-      return;
-    }
-
-    if (currentMemo.id) {
-      await FirebaseService.setMemo(currentMemo, currentMemo.id);
-    } else {
-      const now = Timestamp.fromDate(new Date());
-      const temp = { ...currentMemo, createAt: now, updateAt: now };
-
-      await FirebaseService.setMemo(temp, PRE_MEMO_ID + ++memoSeq.current);
-      setMemo();
-    }
-  };
-
-  const deleteMemo = async () => {
-    if (!currentMemo) {
-      return;
-    }
-    FirebaseService.deleteMemo(currentMemo?.id);
-    setMemo();
-  };
-
-  const formatTime = (time: Date) => {
-    return `
-    ${time.getFullYear().toString().slice(-2)}/
-    ${("0" + (time.getMonth() + 1)).slice(-2)}/${("0" + time.getDate()).slice(
-      -2
-    )} ${("0" + time.getHours()).slice(-2)}:${("0" + time.getMinutes()).slice(
-      -2
-    )}`;
-  };
   return (
     <div>
       <div>
@@ -101,7 +120,7 @@ const Memo = (props: any) => {
       <h2>메모</h2>
       <div className="box_memo">
         <div className="box_title">
-          <label onClick={createNewMemo}>새로운 메모 만들기</label>
+          <label onClick={onClickCreateNewMemo}>새로운 메모 만들기</label>
           <ol>
             {memoList?.map((memo, index) => {
               return (
@@ -161,8 +180,8 @@ const Memo = (props: any) => {
             ></textarea>
             <hr />
             <div>
-              <button onClick={updateMemo}>저장</button>
-              <button onClick={deleteMemo}>삭제</button>
+              <button onClick={onClickUpdateMemo}>저장</button>
+              <button onClick={onClickDeleteMemo}>삭제</button>
             </div>
           </div>
         )}
