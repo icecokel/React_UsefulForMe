@@ -67,6 +67,14 @@ const Memo = (props: any) => {
     }
   };
 
+  const deleteMemo = async () => {
+    if (!currentMemo) {
+      return;
+    }
+    FirebaseService.deleteMemo(currentMemo?.id);
+    setMemo();
+  };
+
   const formatTime = (time: Date) => {
     return `
     ${time.getFullYear().toString().slice(-2)}/
@@ -145,7 +153,7 @@ const Memo = (props: any) => {
             <hr />
             <div>
               <button onClick={updateMemo}>저장</button>
-              <button>삭제</button>
+              <button onClick={deleteMemo}>삭제</button>
             </div>
           </div>
         )}
