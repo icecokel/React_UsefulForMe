@@ -1,11 +1,19 @@
+import { useState } from "react";
 import Header from "../Header";
 
-const BlockList = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+const BLOCK_LIST = ["J", "L", "S", "O", "Z", "T", "I"];
+const MIN_VALUE = 0;
+const MAX_VALUE = 6;
+
+const BOARD_COLUMNS = 12;
+const BOARD_ROWS = 20;
 
 const Tetris = (props: any) => {
+  const [nextBlock, setNextBlock] = useState<Array<string>>([]);
+
   const createBlock = () => {
-    const blockIndex = Math.floor(Math.random() * 10);
-    console.log(blockIndex);
+    const blockIndex = Math.floor(Math.random() * MAX_VALUE + MIN_VALUE);
+    return <Block kind={BLOCK_LIST[blockIndex]}></Block>;
   };
   return (
     <div>
@@ -13,11 +21,11 @@ const Tetris = (props: any) => {
         <Header />
       </div>
       <h2>게임 - 테트리스</h2>
-      <button onClick={createBlock}>111</button>
+      <button onClick={createBlock}>트리거</button>
       <div>
         <ScoreBoard />
         <div>게임 메인</div>
-        <NextBlock />
+        <NextBlock next={nextBlock} />
       </div>
     </div>
   );
@@ -27,11 +35,11 @@ const ScoreBoard = (props: any) => {
   return <div>스코어 보드</div>;
 };
 
-const NextBlock = (props: any) => {
+const NextBlock = (props: { next: Array<string> }) => {
   return <div>넥스트 블록</div>;
 };
 
-const Block = (kind: number) => {
+const Block = (props: { kind: string }) => {
   return <div></div>;
 };
 
