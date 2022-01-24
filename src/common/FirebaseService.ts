@@ -5,6 +5,7 @@ import {
   setBatch,
   deleteData,
   deleteBatch,
+  searchData,
 } from "./firebase";
 
 const FirebaseService = {
@@ -34,6 +35,10 @@ const FirebaseService = {
 
   deleteMemo: async (collectionName: string) => {
     await deleteData("memo", collectionName);
+  },
+
+  fetchWordQuiz: async (keyword: string) => {
+    return await searchData("wordQuiz", keyword);
   },
 };
 
