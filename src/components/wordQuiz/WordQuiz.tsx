@@ -1,7 +1,15 @@
 import Header from "../Header";
 import FirebaseService from "../../common/FirebaseService";
+import { useState } from "react";
 
 const LENGUAGE_LIST = ["word_jp"];
+
+enum MODE {
+  game,
+  config,
+  addWord,
+  main,
+}
 
 /**
  * 단어퀴즈 컴포넌트
@@ -10,13 +18,12 @@ const LENGUAGE_LIST = ["word_jp"];
  * @since 2021/11/30
  */
 const WordQuiz = (props: any) => {
-  const fetchWords = async (lenguageIndex: number) => {
-    const result = await FirebaseService.fetchWordQuiz(
-      LENGUAGE_LIST[lenguageIndex]
-    );
-
-    console.log(result);
-  };
+  const [mode, setMode] = useState<MODE>(MODE.main);
+  // const fetchWords = async (lenguageIndex: number) => {
+  //   const result = await FirebaseService.fetchWordQuiz(
+  //     LENGUAGE_LIST[lenguageIndex]
+  //   );
+  // };
   return (
     <div>
       <div>
@@ -24,14 +31,25 @@ const WordQuiz = (props: any) => {
       </div>
       <h2>단어 퀴즈</h2>
       <div className="box_wordQuiz">
-        <div>
+        {mode === MODE.main && (
+          <div className="box_wordQuiz_main">
+            <div>현재 설정 정보</div>
+            <button onClick={() => setMode(MODE.game)}> 게임 시작하기</button>
+            <button onClick={() => setMode(MODE.config)}> 게임 설정</button>
+            <button onClick={() => setMode(MODE.addWord)}>단어 추가하기</button>
+          </div>
+        )}
+
+        {/* <div>
           <h4>언어</h4>
           <button onClick={() => fetchWords(0)}>일어</button>
         </div>
-        <div></div>
+        <div></div> */}
       </div>
     </div>
   );
 };
+
+const WordGameConfig = (props: any) => {};
 
 export default WordQuiz;
