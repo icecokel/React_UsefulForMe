@@ -29,7 +29,10 @@ const WordQuiz = (props: any) => {
       <div>
         <Header />
       </div>
-      <h2>단어 퀴즈</h2>
+      <div>
+        <h2>단어 퀴즈</h2>
+        <button onClick={() => setMode(MODE.main)}>메뉴로 돌아가기</button>
+      </div>
       <div className="box_wordQuiz">
         {mode === MODE.main && (
           <div className="box_wordQuiz_main">
@@ -40,6 +43,9 @@ const WordQuiz = (props: any) => {
           </div>
         )}
 
+        {mode === MODE.config && <WordGameConfig />}
+        {mode === MODE.addWord && <AddWord />}
+        {mode === MODE.game && <WordGame />}
         {/* <div>
           <h4>언어</h4>
           <button onClick={() => fetchWords(0)}>일어</button>
@@ -50,6 +56,16 @@ const WordQuiz = (props: any) => {
   );
 };
 
-const WordGameConfig = (props: any) => {};
+const WordGameConfig = (props: any) => {
+  return <div> 게임 설정</div>;
+};
+
+const AddWord = (props: any) => {
+  return <div> 단어 추가</div>;
+};
+
+const WordGame = (props: any) => {
+  return <div> 게임시작</div>;
+};
 
 export default WordQuiz;
