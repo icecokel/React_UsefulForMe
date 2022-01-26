@@ -1,6 +1,6 @@
 import Header from "../Header";
 import FirebaseService from "../../common/FirebaseService";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 const LENGUAGE_LIST = ["word_jp"];
 
@@ -18,12 +18,9 @@ enum MODE {
  * @since 2021/11/30
  */
 const WordQuiz = (props: any) => {
+  const [words, setWords] = useState<Array<any>>([]);
   const [mode, setMode] = useState<MODE>(MODE.main);
-  // const fetchWords = async (lenguageIndex: number) => {
-  //   const result = await FirebaseService.fetchWordQuiz(
-  //     LENGUAGE_LIST[lenguageIndex]
-  //   );
-  // };
+
   return (
     <div>
       <div>
@@ -43,21 +40,38 @@ const WordQuiz = (props: any) => {
           </div>
         )}
 
-        {mode === MODE.config && <WordGameConfig />}
+        {mode === MODE.config && <WordGameConfig setWords={setWords} />}
         {mode === MODE.addWord && <AddWord />}
         {mode === MODE.game && <WordGame />}
-        {/* <div>
-          <h4>언어</h4>
-          <button onClick={() => fetchWords(0)}>일어</button>
-        </div>
-        <div></div> */}
       </div>
     </div>
   );
 };
 
 const WordGameConfig = (props: any) => {
-  return <div> 게임 설정</div>;
+  const wordCount = useRef<number>(0);
+  const fetchWords = async (lenguageIndex: number) => {
+    const result = await FirebaseService.fetchWordQuiz(
+      LENGUAGE_LIST[lenguageIndex]
+    );
+    console.log(result);
+
+    // TODO 결과 값을 Array 형식으려 변환
+
+    wordCount.current = (result as Array<any>).length;
+
+    props.setWords(result);
+  };
+  return (
+    <div>
+      <h4>게임 설정</h4>
+      <div>
+        <h4>언어</h4>
+        <button onClick={() => fetchWords(0)}>일어</button>
+      </div>
+      <div>준비된 단어 수 : {wordCount.current}</div>
+    </div>
+  );
 };
 
 const AddWord = (props: any) => {
