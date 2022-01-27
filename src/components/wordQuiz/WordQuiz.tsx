@@ -49,12 +49,12 @@ const WordQuiz = (props: any) => {
 };
 
 const WordGameConfig = (props: any) => {
+  const [config, setConfig] = useState<any>();
   const wordCount = useRef<number>(0);
   const fetchWords = async (lenguageIndex: number) => {
     const result = await FirebaseService.fetchWordQuiz(
       LENGUAGE_LIST[lenguageIndex]
     );
-    console.log(result);
 
     // TODO 결과 값을 Array 형식으려 변환
 
@@ -70,6 +70,18 @@ const WordGameConfig = (props: any) => {
         <button onClick={() => fetchWords(0)}>일어</button>
       </div>
       <div>준비된 단어 수 : {wordCount.current}</div>
+
+      <div>
+        <input
+          type="number"
+          placeholder="진행할 단어 수 "
+          onChange={(e) => {
+            setConfig({ ...config, wordCount: e.target.value });
+          }}
+        />
+      </div>
+
+      <button>설정</button>
     </div>
   );
 };
