@@ -87,7 +87,16 @@ const WordGameConfig = (props: any) => {
 };
 
 const AddWord = (props: any) => {
-  return <div> 단어 추가</div>;
+  return (
+    <div>
+      <h4>단어 추가</h4>
+      <div>
+        <input type="text" placeholder="단어" />
+        <input type="text" placeholder="발음" />
+        <input type="text" placeholder="뜻" />
+      </div>
+    </div>
+  );
 };
 
 const WordGame = (props: any) => {
