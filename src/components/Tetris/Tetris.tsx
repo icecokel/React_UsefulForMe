@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Header from "../Header";
 
 const BLOCK_LIST = ["J", "L", "S", "O", "Z", "T", "I"];
@@ -10,18 +10,32 @@ const BOARD_ROWS = 20;
 
 const Tetris = (props: any) => {
   const [nextBlock, setNextBlock] = useState<Array<string>>([]);
+  const [gameStatus, setGameState] = useState<string>("Ready");
+  const triggerRef = useRef<HTMLInputElement>(null);
 
   const createBlock = () => {
     const blockIndex = Math.floor(Math.random() * MAX_VALUE + MIN_VALUE);
     return <Block kind={BLOCK_LIST[blockIndex]}></Block>;
   };
+
+  const onClickStart = () => {
+    if (!triggerRef) {
+      return;
+    }
+
+    triggerRef.current?.focus();
+    setGameState("Start");
+  };
+
   return (
     <div>
       <div>
         <Header />
       </div>
       <h2>게임 - 테트리스</h2>
-      <button onClick={createBlock}>트리거</button>
+      <button onClick={createBlock}>테스트</button>
+      <button onClick={onClickStart}> Start</button>
+      <input type="text" ref={triggerRef} hidden />
       <div>
         <ScoreBoard />
         <div>게임 메인</div>
