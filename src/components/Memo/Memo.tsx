@@ -1,6 +1,13 @@
 import Header from "../Header";
 import FirebaseService from "../../common/FirebaseService";
-import { useEffect, useRef, useState } from "react";
+import {
+  ChangeEvent,
+  ChangeEventHandler,
+  EventHandler,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { Timestamp } from "firebase/firestore/lite";
 
 interface MEMO {
@@ -21,7 +28,7 @@ const PRE_MEMO_ID = "memo_";
  */
 const Memo = (props: any) => {
   const [memoList, setMemoList] = useState<Array<MEMO>>();
-  const [currentMemo, setCurrentMemo] = useState<MEMO>();
+  const [currentMemo, setCurrentMemo] = useState<any>();
   const memoSeq = useRef<number>(0);
 
   useEffect(() => {
@@ -112,6 +119,12 @@ const Memo = (props: any) => {
     setMemoList(tempList);
   };
 
+  const onChange = (e: ChangeEvent<any>) => {
+    const { name, value } = e.target;
+    const temp = { ...currentMemo, [name]: value };
+    setCurrentMemo(temp);
+  };
+
   return (
     <div>
       <div>
@@ -148,9 +161,8 @@ const Memo = (props: any) => {
                 type="text"
                 value={currentMemo.title}
                 placeholder="제목을 입력해주세요."
-                onChange={(e) =>
-                  setCurrentMemo({ ...currentMemo, title: e.target.value })
-                }
+                name="title"
+                onChange={onChange}
               />
               <div>
                 <span>
@@ -174,9 +186,8 @@ const Memo = (props: any) => {
               rows={50}
               value={currentMemo.contents}
               placeholder="내용을 입력해주세요."
-              onChange={(e) =>
-                setCurrentMemo({ ...currentMemo, contents: e.target.value })
-              }
+              name="contents"
+              onChange={onChange}
             ></textarea>
             <hr />
             <div>
